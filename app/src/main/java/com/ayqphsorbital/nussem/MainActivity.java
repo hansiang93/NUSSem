@@ -3,12 +3,13 @@ package com.ayqphsorbital.nussem;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SemesterOne.OnFragmentInteractionListener{
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
@@ -41,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
         // Tie DrawerLayout events to the ActionBarToggle
         dlDrawer.setDrawerListener(drawerToggle);
 
-        // Set the menu icon instead of the launcher icon.
-        final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
 
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
@@ -68,10 +66,11 @@ public class MainActivity extends AppCompatActivity {
         // position
         Fragment fragment = null;
 
-       // Class fragmentClass;
+        Class fragmentClass;
+        fragmentClass = SemesterOne.class;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                //fragmentClass = FirstFragment.class;
+                fragmentClass = SemesterOne.class;
                 break;
             case R.id.nav_second_fragment:
                // fragmentClass = SecondFragment.class;
@@ -80,18 +79,18 @@ public class MainActivity extends AppCompatActivity {
               //  fragmentClass = ThirdFragment.class;
                 break;
             default:
-              //  fragmentClass = FirstFragment.class;
+                fragmentClass = SemesterOne.class;
         }
 
-       // try {
-            //fragment = (Fragment) fragmentClass.newInstance();
-       // } catch (Exception e) {
-       //     e.printStackTrace();
-       // }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Insert the fragment by replacing any existing fragment
-       // FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        //fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer
         menuItem.setChecked(true);
@@ -139,4 +138,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
