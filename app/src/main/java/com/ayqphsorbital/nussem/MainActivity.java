@@ -17,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity implements SemesterOne.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements SemesterOne.OnFragmentInteractionListener, SemesterTwo.OnFragmentInteractionListener{
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements SemesterOne.OnFra
                 fragmentClass = SemesterOne.class;
                 break;
             case R.id.nav_second_fragment:
-               // fragmentClass = SecondFragment.class;
+                fragmentClass = SemesterTwo.class;
                 break;
             case R.id.nav_third_fragment:
               //  fragmentClass = ThirdFragment.class;
