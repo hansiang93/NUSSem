@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SemesterTwo.OnFragmentInteractionListener} interface
+ * {@link OneSemTwo.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SemesterTwo#newInstance} factory method to
+ * Use the {@link OneSemTwo#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SemesterTwo extends Fragment {
+public class OneSemTwo extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,11 +35,11 @@ public class SemesterTwo extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SemesterOne.
+     * @return A new instance of fragment OneSemOne.
      */
     // TODO: Rename and change types and number of parameters
-    public static SemesterTwo newInstance(String param1, String param2) {
-        SemesterTwo fragment = new SemesterTwo();
+    public static OneSemTwo newInstance(String param1, String param2) {
+        OneSemTwo fragment = new OneSemTwo();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,7 +47,7 @@ public class SemesterTwo extends Fragment {
         return fragment;
     }
 
-    public SemesterTwo() {
+    public OneSemTwo() {
         // Required empty public constructor
     }
 
@@ -64,7 +64,7 @@ public class SemesterTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_semester_two, container, false);
+        return inflater.inflate(R.layout.fragment_two_sem_two, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

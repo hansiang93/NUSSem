@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,12 +16,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity implements SemesterOne.OnFragmentInteractionListener, SemesterTwo.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements
+        MainPage.OnFragmentInteractionListener,
+        OneSemOne.OnFragmentInteractionListener,
+        OneSemTwo.OnFragmentInteractionListener{
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    private Fragment fragment = null;
+    private Class fragmentClass;
+    private FragmentManager fragmentManager;
 
 
     @Override
@@ -48,6 +53,18 @@ public class MainActivity extends AppCompatActivity implements SemesterOne.OnFra
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
+        drawerToggle.syncState();
+
+
+        //Setting first loading page to be a new frame
+        fragmentClass = MainPage.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -64,22 +81,22 @@ public class MainActivity extends AppCompatActivity implements SemesterOne.OnFra
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the planet to show based on
         // position
-        Fragment fragment = null;
-
-        Class fragmentClass;
-        fragmentClass = SemesterOne.class;
+        fragmentClass = OneSemOne.class;
         switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragmentClass = SemesterOne.class;
+            case R.id.main_page:
+                fragmentClass = MainPage.class;
                 break;
-            case R.id.nav_second_fragment:
-                fragmentClass = SemesterTwo.class;
+            case R.id.one_sem_one:
+                fragmentClass = OneSemOne.class;
+                break;
+            case R.id.one_sem_two:
+                fragmentClass = OneSemTwo.class;
                 break;
             case R.id.nav_third_fragment:
               //  fragmentClass = ThirdFragment.class;
                 break;
             default:
-                fragmentClass = SemesterOne.class;
+                fragmentClass = MainPage.class;
         }
 
         try {
@@ -89,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements SemesterOne.OnFra
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer

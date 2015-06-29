@@ -5,17 +5,24 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="Semesters">
-        <item >Sem 1</item>
-        <item >Sem 2</item>
-        <item >Sem 3</item>
-        <item >Sem 4</item>
-        <item >Sem 5</item>
-        <item >Sem 6</item>
-        <item >Sem 7</item>
-        <item >Sem 8</item>
+
+    <string name="Sem_One">Semester One</string>
+    <string name="Sem_Two">Semester Two</string>
+
+    <string name="Year_One">Year One</string>
+    <string name="Year_Two">Year Two</string>
+    <string name="Year_Three">Year Three</string>
+    <string name="Year_Four">Year Four</string>
+
+
+    <string-array name="Years">
+        <item>Year One</item>
+        <item>Year Two</item>
+        <item>Year Three</item>
+        <item>Year Four</item>
 
     </string-array>
+
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>

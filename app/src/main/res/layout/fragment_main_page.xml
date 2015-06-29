@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.ayqphsorbital.nussem.SemesterOne">
+    android:layout_height="match_parent" tools:context="com.ayqphsorbital.nussem.OneSemOne">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="Sem 1 Blank Frag"
+        android:text="MAIN PAGE Blank Frag"
         android:textSize="100sp"/>
 
 </FrameLayout>

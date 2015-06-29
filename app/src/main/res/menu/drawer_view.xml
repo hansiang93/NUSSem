@@ -1,26 +1,64 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
-            android:icon="@drawable/ic_one"
-            android:title="First" />
+            android:id="@+id/main_page"
+            android:title="Main Page?" />
         <item
             android:id="@+id/nav_second_fragment"
-            android:icon="@drawable/ic_two"
-            android:title="Second" />
+            android:title="Placehold" />
         <item
             android:id="@+id/nav_third_fragment"
-            android:icon="@drawable/ic_three"
-            android:title="Third" />
+            android:title="Placehold" />
 
-        <item android:title="Sub items">
+        <item android:title="@string/Year_One">
             <menu>
                 <item
                     android:icon="@drawable/ic_one"
-                    android:title="Sub item 1" />
+                    android:title="@string/Sem_One"
+                    android:id="@+id/one_sem_one" />
                 <item
                     android:icon="@drawable/ic_two"
-                    android:title="Sub item 2" />
+                    android:title="@string/Sem_Two"
+                    android:id="@+id/one_sem_two" />
+            </menu>
+        </item>
+
+        <item android:title="@string/Year_Two">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_one"
+                    android:title="@string/Sem_One"
+                    android:id="@+id/two_sem_one" />
+                <item
+                    android:icon="@drawable/ic_two"
+                    android:title="@string/Sem_Two"
+                    android:id="@+id/two_sem_two"/>
+            </menu>
+        </item>
+
+        <item android:title="@string/Year_Three">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_one"
+                    android:title="@string/Sem_One"
+                    android:id="@+id/three_sem_one" />
+                <item
+                    android:icon="@drawable/ic_two"
+                    android:title="@string/Sem_Two"
+                    android:id="@+id/three_sem_two" />
+            </menu>
+        </item>
+
+        <item android:title="@string/Year_Four">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_one"
+                    android:title="@string/Sem_One"
+                    android:id="@+id/four__sem_one" />
+                <item
+                    android:icon="@drawable/ic_two"
+                    android:title="@string/Sem_Two"
+                    android:id="@+id/four_sem_two" />
             </menu>
         </item>
     </group>
