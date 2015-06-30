@@ -13,7 +13,7 @@
 
     <!-- Search Widget -->
     <item
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         android:id="@+id/action_search"
         android:orderInCategory="200"
         android:title="Search"

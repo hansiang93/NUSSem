@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,13 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 
 
 public class MainActivity extends AppCompatActivity implements
         MainPage.OnFragmentInteractionListener,
         OneSemOne.OnFragmentInteractionListener,
-        OneSemTwo.OnFragmentInteractionListener{
+        OneSemTwo.OnFragmentInteractionListener,
+SearchView.OnQueryTextListener{
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
@@ -62,7 +64,14 @@ public class MainActivity extends AppCompatActivity implements
         drawerToggle.syncState();
 
 
-
+//Recents suggestions for searchbar
+        Intent intent  = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
+        }
 
 
         //Setting first loading page to be a new frame
@@ -78,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-        handleIntent(getIntent());
 
     }
 
@@ -136,42 +144,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-
-    //Search functions
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
-
-
-    public void onListItemClick(ListView l,
-                                View v, int position, long id) {
-        // call detail activity for clicked entry
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            doSearch(query);
-
-        }
-    }
-
-    private void doSearch(String queryStr) {
-        // get a Cursor, prepare the ListAdapter
-        // and set it
-    }
-
-
-
-
-
-
-
-
-
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
@@ -195,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
 
         return true;
@@ -219,5 +191,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
