@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 
@@ -59,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements
         drawerToggle.syncState();
 
 
+
+
+
         //Setting first loading page to be a new frame
         fragmentClass = MainPage.class;
         try {
@@ -68,6 +74,12 @@ public class MainActivity extends AppCompatActivity implements
         }
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
+
+
+        handleIntent(getIntent());
+
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -118,10 +130,47 @@ public class MainActivity extends AppCompatActivity implements
         dlDrawer.closeDrawers();
     }
 
-
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, dlDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
     }
+
+
+
+
+    //Search functions
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+
+    public void onListItemClick(ListView l,
+                                View v, int position, long id) {
+        // call detail activity for clicked entry
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            doSearch(query);
+
+        }
+    }
+
+    private void doSearch(String queryStr) {
+        // get a Cursor, prepare the ListAdapter
+        // and set it
+    }
+
+
+
+
+
+
+
+
 
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
