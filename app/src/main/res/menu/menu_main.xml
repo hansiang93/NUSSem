@@ -4,12 +4,16 @@
     tools:context="com.ayqphsorbital.nussem.MainActivity">
 
 
-    <item android:id="@+id/action_settings"
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+
+    <!-- Search Widget -->
     <item
+        app:actionViewClass="android.widget.SearchView"
         android:id="@+id/action_search"
         android:orderInCategory="200"
         android:title="Search"
