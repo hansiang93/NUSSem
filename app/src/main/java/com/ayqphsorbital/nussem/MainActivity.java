@@ -16,18 +16,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 public class MainActivity extends AppCompatActivity implements
         MainPage.OnFragmentInteractionListener,
         OneSemOne.OnFragmentInteractionListener,
         OneSemTwo.OnFragmentInteractionListener,
-SearchView.OnQueryTextListener{
+        SearchView.OnQueryTextListener{
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
@@ -36,6 +46,8 @@ SearchView.OnQueryTextListener{
     private Fragment fragment = null;
     private Class fragmentClass;
     private FragmentManager fragmentManager;
+    private String Test;
+    private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
 
 
     @Override
@@ -62,6 +74,9 @@ SearchView.OnQueryTextListener{
         setupDrawerContent(nvDrawer);
 
         drawerToggle.syncState();
+
+        Test = "moduleList.json";
+        queryNUSMods(Test);
 
 
 //Recents suggestions for searchbar
@@ -138,9 +153,57 @@ SearchView.OnQueryTextListener{
         dlDrawer.closeDrawers();
     }
 
+
+    private void queryNUSMods(String searchString) {
+
+        // Prepare your search string to be put in a URL
+        // It might have reserved characters or something
+        String urlString = "";
+        try {
+            urlString = URLEncoder.encode(searchString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+            // if this fails for some reason, let the user know why
+            e.printStackTrace();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        // Create a client to perform networking
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        // Have the client get a JSONArray of data
+        // and define how to respond
+        client.get(QUERY_URL + urlString,
+                new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(JSONObject jsonObject) {
+                        // Display a "Toast" message
+                        // to announce your success
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+
+                        // 8. For now, just log results
+                        Log.d("omg android", jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+                        // Display a "Toast" message
+                        // to announce the failure
+                        Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+
+                        // Log error message
+                        // to help solve any problems
+                        Log.e("omg android", statusCode + " " + throwable.getMessage());
+                    }
+                });
+    }
+
+
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, dlDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
     }
+
 
 
 
