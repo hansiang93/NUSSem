@@ -90,6 +90,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         // Prepare your search string to be put in a URL
         // It might have reserved characters or something
+        final String[] data = {""};
         String urlString = "";
         try {
             urlString = URLEncoder.encode(searchString, "UTF-8");
@@ -110,13 +111,21 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
-                        // Display a "Toast" message
-                        // to announce your success
-                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
-
-                        // 8. For now, just log results
-                        Log.d("omg android", jsonObject.toString());
-                        ResultsList.setText(jsonObject.toString());
+                        //Displays results
+                        String ModuleCode = jsonObject.optString("ModuleCode");
+                        String ModuleTitle = jsonObject.optString("ModuleTitle");
+                        String Department = jsonObject.optString("Department");
+                        String ModuleDescription = jsonObject.optString("ModuleDescription");
+                        String ModuleCredit = jsonObject.optString("ModuleCredit");
+                        String Workload = jsonObject.optString("Workload");
+                        String Prerequisite = jsonObject.optString("Prerequisite");
+                        String Preclusion = jsonObject.optString("Preclusion");
+                        data[0] += "Module Code: " + ModuleCode + "\n \nModule Title: " + ModuleTitle
+                                + "\n \nDepartment: " + Department + "\n \nModule Description: " +
+                                ModuleDescription + "\n \nModule Credit: " + ModuleCredit + "\n \nWorkload"
+                                + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
+                                Preclusion + "\n";
+                        ResultsList.setText(data[0]);
                     }
 
                     @Override
