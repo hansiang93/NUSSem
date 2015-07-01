@@ -1,18 +1,23 @@
 package com.ayqphsorbital.nussem;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SearchRecentSuggestionsProvider;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by HanSiang on 30/06/2015.
@@ -22,6 +27,8 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private TextView ResultsList;
     private Toolbar toolbar;
+    private AsyncHttpClient client;
+    private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/modules/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +79,58 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void showResults(String query) {
         // Query your data set and show results
         // ...
-        ResultsList.setText(query);
+        queryNUSMods(query);
+
     }
 
+
+
+
+    private void queryNUSMods(String searchString) {
+
+        // Prepare your search string to be put in a URL
+        // It might have reserved characters or something
+        String urlString = "";
+        try {
+            urlString = URLEncoder.encode(searchString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+            // if this fails for some reason, let the user know why
+            e.printStackTrace();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        // Create a client to perform networking
+        client = new AsyncHttpClient();
+
+        // Have the client get a JSONArray of data
+        // and define how to respond
+        client.get(QUERY_URL + urlString.toUpperCase() + "/index.json",
+                new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(JSONObject jsonObject) {
+                        // Display a "Toast" message
+                        // to announce your success
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+
+                        // 8. For now, just log results
+                        Log.d("omg android", jsonObject.toString());
+                        ResultsList.setText(jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+                        // Display a "Toast" message
+                        // to announce the failure
+                        Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+
+                        // Log error message
+                        // to help solve any problems
+                        Log.e("omg android", statusCode + " " + throwable.getMessage());
+                    }
+                });
+
+    }
 
 }
