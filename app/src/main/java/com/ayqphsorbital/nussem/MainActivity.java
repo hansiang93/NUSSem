@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.PrivateKey;
 import java.util.List;
 
 
@@ -165,9 +166,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void UpdateNUSModList() {
 
-        // Prepare your search string to be put in a URL
-        // It might have reserved characters or something
-        final String[] data = {""};
 
         // Create a client to perform networking
         client = new AsyncHttpClient();
@@ -181,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(JSONArray jsonArray) {
                         //Displays results
                         Log.d("Insert: ", "Inserting ..");
-                        for (int i=0; i<jsonArray.length()/20; i++) {
+                        for (int i=0; i<jsonArray.length(); i++) {
                             try {
                                 String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
                                 String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
@@ -189,9 +187,8 @@ public class MainActivity extends AppCompatActivity implements
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
                         }
+                        Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -208,15 +205,15 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-        // Reading all contacts
-        Log.d("Reading: ", "Reading all contacts..");
-        List<ModuleInfo> contacts = db.getAllMods();
-
-        for (ModuleInfo cn : contacts) {
-            String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
-            // Writing Contacts to log
-            Log.d("Name: ", log);
-        }
+        //// Reading all contacts
+        //Log.d("Reading: ", "Reading all contacts..");
+        //List<ModuleInfo> contacts = db.getAllMods();
+        //
+        //      for (ModuleInfo cn : contacts) {
+        //        String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
+        //// Writing Contacts to log
+        //    Log.d("Name: ", log);
+        //}
 
     }
 

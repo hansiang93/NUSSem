@@ -23,7 +23,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ModuleList";
 
     // Contacts table name
-    private static final String TABLE_CONTACTS = "ModuleInfo";
+    private static final String TABLE_MODULES = "ModuleInfo";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
@@ -38,17 +38,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
+        String CREATE_MODULES_TABLE = "CREATE TABLE " + TABLE_MODULES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
                 + KEY_TITLE + " TEXT" + ")";
-        db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL(CREATE_MODULES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODULES);
 
         // Create tables again
         onCreate(db);
@@ -65,7 +65,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, Mod.getModuleTitle()); // Module Title
 
         // Inserting Row
-        db.insert(TABLE_CONTACTS, null, values);
+        db.insert(TABLE_MODULES, null, values);
         db.close(); // Closing database connection
 
 
@@ -77,7 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,
+        Cursor cursor = db.query(TABLE_MODULES, new String[] { KEY_ID,
                         KEY_CODE, KEY_TITLE}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
@@ -94,7 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         List<ModuleInfo> moduleList = new ArrayList<ModuleInfo>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_CONTACTS;
+        String selectQuery = "SELECT  * FROM " + TABLE_MODULES;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -121,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting contacts Count
     public int getModsCount() {
 
-        String countQuery = "SELECT  * FROM " + TABLE_CONTACTS;
+        String countQuery = "SELECT  * FROM " + TABLE_MODULES;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
@@ -139,7 +139,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, Mod.getModuleTitle());
 
         // updating row
-        return db.update(TABLE_CONTACTS, values, KEY_ID + " = ?",
+        return db.update(TABLE_MODULES, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(Mod.getID()) });
 
     }
@@ -147,7 +147,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Deleting single contact
     public void deleteMod (ModuleInfo Mod) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CONTACTS, KEY_ID + " = ?",
+        db.delete(TABLE_MODULES, KEY_ID + " = ?",
                 new String[] { String.valueOf(Mod.getID()) });
         db.close();
 
