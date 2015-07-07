@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements
         db = new DatabaseHandler(this);
 
         UpdateNUSModList();
-
 
 
         //Recents suggestions for searchbar
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(JSONArray jsonArray) {
                         //Displays results
                         Log.d("Insert: ", "Inserting ..");
-                        for (int i=0; i<jsonArray.length(); i++) {
+                        for (int i=0; i<jsonArray.length()/20; i++) {
                             try {
                                 String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
                                 String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
@@ -205,6 +205,18 @@ public class MainActivity extends AppCompatActivity implements
                         Log.e("omg android", statusCode + " " + throwable.getMessage());
                     }
                 });
+
+
+
+        // Reading all contacts
+        Log.d("Reading: ", "Reading all contacts..");
+        List<ModuleInfo> contacts = db.getAllMods();
+
+        for (ModuleInfo cn : contacts) {
+            String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
 
     }
 
@@ -261,7 +273,20 @@ public class MainActivity extends AppCompatActivity implements
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
+
                 UpdateNUSModList();
+
+
+                // Reading all contacts
+                Log.d("Reading: ", "Reading all contacts..");
+                List<ModuleInfo> contacts = db.getAllMods();
+
+                for (ModuleInfo cn : contacts) {
+                    String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
+                    // Writing Contacts to log
+                    Log.d("Name: ", log);
+                }
             }
         });
 

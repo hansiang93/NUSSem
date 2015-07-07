@@ -4,9 +4,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
 
 
 /**
@@ -17,7 +22,7 @@ import android.view.ViewGroup;
  * Use the {@link MainPage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainPage extends Fragment {
+public class MainPage extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +69,10 @@ public class MainPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_page, container, false);
+        View v =inflater.inflate(R.layout.fragment_main_page, container, false);
+        Button button = (Button) v.findViewById(R.id.updateDB);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +97,15 @@ public class MainPage extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.updateDB:
+        }
+
+
     }
 
     /**
