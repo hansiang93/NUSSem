@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements
     private Fragment fragment = null;
     private Class fragmentClass;
     private FragmentManager fragmentManager;
-    private String Test;
+    private AsyncHttpClient client;
+    DatabaseHandler db;
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
 
 
@@ -75,11 +79,14 @@ public class MainActivity extends AppCompatActivity implements
 
         drawerToggle.syncState();
 
-        Test = "moduleList.json";
-        queryNUSMods(Test);
+        //Create Database
+        db = new DatabaseHandler(this);
+
+        UpdateNUSModList();
 
 
-//Recents suggestions for searchbar
+
+        //Recents suggestions for searchbar
         Intent intent  = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -154,36 +161,37 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private void queryNUSMods(String searchString) {
+
+
+    private void UpdateNUSModList() {
 
         // Prepare your search string to be put in a URL
         // It might have reserved characters or something
-        String urlString = "";
-        try {
-            urlString = URLEncoder.encode(searchString, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-
-            // if this fails for some reason, let the user know why
-            e.printStackTrace();
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        final String[] data = {""};
 
         // Create a client to perform networking
-        AsyncHttpClient client = new AsyncHttpClient();
+        client = new AsyncHttpClient();
 
         // Have the client get a JSONArray of data
         // and define how to respond
-        client.get(QUERY_URL + urlString,
+        client.get(QUERY_URL + "moduleList.json",
                 new JsonHttpResponseHandler() {
 
                     @Override
-                    public void onSuccess(JSONObject jsonObject) {
-                        // Display a "Toast" message
-                        // to announce your success
-                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+                    public void onSuccess(JSONArray jsonArray) {
+                        //Displays results
+                        Log.d("Insert: ", "Inserting ..");
+                        for (int i=0; i<jsonArray.length(); i++) {
+                            try {
+                                String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
+                                String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
+                                db.addMod(new ModuleInfo(ModuleCode,ModuleTitle));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
-                        // 8. For now, just log results
-                        Log.d("omg android", jsonObject.toString());
+
+                        }
                     }
 
                     @Override
@@ -199,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements
                 });
 
     }
+
 
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -248,6 +257,13 @@ public class MainActivity extends AppCompatActivity implements
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        Button button = (Button) findViewById(R.id.updateDB);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateNUSModList();
+            }
+        });
 
         return super.onOptionsItemSelected(item);
     }

@@ -57,7 +57,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     // Adding new contact
-    public void addContact(ModuleInfo Mod) {
+    public void addMod(ModuleInfo Mod) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

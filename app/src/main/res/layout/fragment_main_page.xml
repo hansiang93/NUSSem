@@ -7,4 +7,11 @@
         android:text="MAIN PAGE Blank Frag"
         android:textSize="100sp"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UpdateDatabase"
+        android:id="@+id/updateDB"
+        android:layout_gravity="left|center_vertical" />
+
 </FrameLayout>

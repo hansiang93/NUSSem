@@ -17,16 +17,16 @@ public class ModuleInfo {
 
     }
     // constructor
-    public ModuleInfo(int id, String name, String _phone_number){
+    public ModuleInfo(int id, String ModuleCode, String ModuleTitle){
         this._id = id;
-        this._ModuleCode = name;
-        this._ModuleTitle = _phone_number;
+        this._ModuleCode = ModuleCode;
+        this._ModuleTitle = ModuleTitle;
     }
 
     // constructor
-    public ModuleInfo(String name, String _phone_number){
-        this._ModuleCode = name;
-        this._ModuleTitle = _phone_number;
+    public ModuleInfo(String ModuleCode, String ModuleTitle){
+        this._ModuleCode = ModuleCode;
+        this._ModuleTitle = ModuleTitle;
     }
     // getting ID
     public int getID(){
