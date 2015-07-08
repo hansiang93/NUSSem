@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.SearchRecentSuggestions;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements
         MainPage.OnFragmentInteractionListener,
         OneSemOne.OnFragmentInteractionListener,
         OneSemTwo.OnFragmentInteractionListener,
-        SearchView.OnQueryTextListener{
+        SearchView.OnQueryTextListener {
 
     private DrawerLayout dlDrawer;
     private Toolbar toolbar;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentManager fragmentManager;
     private AsyncHttpClient client;
     DatabaseHandler db;
+    DBupdate BackgroundDBupdater;
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
 
 
@@ -84,11 +86,9 @@ public class MainActivity extends AppCompatActivity implements
         //Create Database
         db = new DatabaseHandler(this);
 
-        UpdateNUSModList();
-
 
         //Recents suggestions for searchbar
-        Intent intent  = getIntent();
+        Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
@@ -109,9 +109,11 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-
-
+        BackgroundDBupdater = new DBupdate();
+        BackgroundDBupdater.run();
     }
+
+
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements
         // Create a new fragment and specify the planet to show based on
         // position
         fragmentClass = OneSemOne.class;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.main_page:
                 fragmentClass = MainPage.class;
                 break;
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentClass = OneSemTwo.class;
                 break;
             case R.id.nav_third_fragment:
-              //  fragmentClass = ThirdFragment.class;
+                //  fragmentClass = ThirdFragment.class;
                 break;
             default:
                 fragmentClass = MainPage.class;
@@ -163,67 +165,94 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+    private class DBupdate implements Runnable {
 
-    private void UpdateNUSModList() {
 
 
-        // Create a client to perform networking
-        client = new AsyncHttpClient();
+        @Override
+        public void run() {
 
-        // Have the client get a JSONArray of data
-        // and define how to respond
-        client.get(QUERY_URL + "moduleList.json",
-                new JsonHttpResponseHandler() {
+            // Moves the current Thread into the background
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-                    @Override
-                    public void onSuccess(JSONArray jsonArray) {
-                        //Displays results
-                        Log.d("Insert: ", "Inserting ..");
-                        for (int i=0; i<jsonArray.length(); i++) {
-                            try {
-                                String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
-                                String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
-                                db.addMod(new ModuleInfo(ModuleCode,ModuleTitle));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+            if (db.getModsCount() == 0 ) {
+
+
+                Log.d("UPDATING UPDATING", "DATABASE..");
+                UpdateNUSModList();
+            }else {
+
+                Log.d("DATABASE EXISTS ", "Reading ..");
+                ReadDB();
+            }
+        }
+
+        private void UpdateNUSModList() {
+
+
+            // Create a client to perform networking
+            client = new AsyncHttpClient();
+
+            // Have the client get a JSONArray of data
+            // and define how to respond
+            client.get(QUERY_URL + "moduleList.json",
+                    new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(JSONArray jsonArray) {
+                            //Displays results
+
+                                Log.d("Insert: ", "Inserting ..");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
+                                        String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
+                                        db.addMod(new ModuleInfo(ModuleCode, ModuleTitle));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
+
+
                         }
-                        Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
-                        // Display a "Toast" message
-                        // to announce the failure
-                        Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+                            // Display a "Toast" message
+                            // to announce the failure
+                            Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
 
-                        // Log error message
-                        // to help solve any problems
-                        Log.e("omg android", statusCode + " " + throwable.getMessage());
-                    }
-                });
+                            // Log error message
+                            // to help solve any problems
+                            Log.e("omg android", statusCode + " " + throwable.getMessage());
+                        }
+                    });
 
 
 
-        //// Reading all contacts
-        //Log.d("Reading: ", "Reading all contacts..");
-        //List<ModuleInfo> contacts = db.getAllMods();
-        //
-        //      for (ModuleInfo cn : contacts) {
-        //        String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
-        //// Writing Contacts to log
-        //    Log.d("Name: ", log);
-        //}
+        }
+        private void ReadDB(){
 
+            // Reading all contacts
+            Log.d("Reading: ", "Reading all contacts..");
+            List<ModuleInfo> contacts = db.getAllMods();
+
+            for (ModuleInfo cn : contacts) {
+                String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
+                // Writing Contacts to log
+                Log.d("Name: ", log);
+            }
+        }
     }
+
+
 
 
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, dlDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, dlDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
-
-
 
 
     @Override
@@ -267,25 +296,6 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
         Button button = (Button) findViewById(R.id.updateDB);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
-
-                UpdateNUSModList();
-
-
-                // Reading all contacts
-                Log.d("Reading: ", "Reading all contacts..");
-                List<ModuleInfo> contacts = db.getAllMods();
-
-                for (ModuleInfo cn : contacts) {
-                    String log = "Id: "+cn.getID()+" ,Code: " + cn.getModuleCode() + " ,Title: " + cn.getModuleTitle();
-                    // Writing Contacts to log
-                    Log.d("Name: ", log);
-                }
-            }
-        });
 
         return super.onOptionsItemSelected(item);
     }
@@ -304,4 +314,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onQueryTextChange(String newText) {
         return false;
     }
+
+
 }
