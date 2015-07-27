@@ -1,12 +1,17 @@
 package com.ayqphsorbital.nussem;
 
 import android.app.Activity;
+import android.app.ListFragment;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 
 /**
@@ -17,7 +22,7 @@ import android.view.ViewGroup;
  * Use the {@link OneSemOne#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OneSemOne extends Fragment {
+public class OneSemOne extends ListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -26,6 +31,7 @@ public class OneSemOne extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ListView mListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +70,22 @@ public class OneSemOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one_sem_one, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_one_sem_one, container, false);
+        String[] fromColumns = new String[]{"ModuleTitle"};
+        int[] toViews = {android.R.id.text1};
+
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        db.getReadableDatabase();
+        Cursor mCursor = db.getAllModsFromSem();
+        ListView modulelist = (ListView)rootview .findViewById(android.R.id.list);
+
+
+        SimpleCursorAdapter mListAdapter;
+        mListAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, mCursor,fromColumns, toViews, 0);
+
+        modulelist.setAdapter(mListAdapter);
+
+        return rootview;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

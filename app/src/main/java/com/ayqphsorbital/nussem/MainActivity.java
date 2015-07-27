@@ -38,6 +38,8 @@ import java.net.URLEncoder;
 import java.security.PrivateKey;
 import java.util.List;
 
+import static android.os.Process.*;
+
 
 public class MainActivity extends AppCompatActivity implements
         MainPage.OnFragmentInteractionListener,
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements
 
         drawerToggle.syncState();
 
-        //Create Database
         db = new DatabaseHandler(this);
 
 
@@ -107,10 +108,18 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
+        //Create Database
+
+        //BackgroundDBupdater = new DBupdate();
+        //BackgroundDBupdater.run();
 
 
-        BackgroundDBupdater = new DBupdate();
-        BackgroundDBupdater.run();
+        //creating the button to add semesters
+
+
+
+
+
     }
 
 
@@ -173,20 +182,26 @@ public class MainActivity extends AppCompatActivity implements
         public void run() {
 
             // Moves the current Thread into the background
-            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            //setThreadPriority(THREAD_PRIORITY_BACKGROUND);
 
-            if (db.getModsCount() == 0 ) {
+            Log.d("UPDATING UPDATING", "DATABASE..");
+            UpdateNUSModList();
+
+        }
+
+            /*if (db.getModsCount() == 0 ) {
 
 
                 Log.d("UPDATING UPDATING", "DATABASE..");
                 UpdateNUSModList();
-            }else {
+            }
+        else {
 
                 Log.d("DATABASE EXISTS ", "Reading ..");
                 ReadDB();
             }
         }
-
+           */
         private void UpdateNUSModList() {
 
 
@@ -203,17 +218,17 @@ public class MainActivity extends AppCompatActivity implements
                             //Displays results
 
                                 Log.d("Insert: ", "Inserting ..");
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    try {
-                                        String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
-                                        String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
-                                        db.addMod(new ModuleInfo(ModuleCode, ModuleTitle));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
 
+                            for (int i = 0; i < 10; i++) {
+                                try {
+                                    String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
+                                    String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
+                                    db.addMod(new ModuleInfo(ModuleCode, ModuleTitle));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
 
                         }
 
@@ -295,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        Button button = (Button) findViewById(R.id.updateDB);
+        Button button = (Button) findViewById(R.id.addsem);
 
         return super.onOptionsItemSelected(item);
     }

@@ -11,6 +11,7 @@ public class ModuleInfo {
     int _id;
     String _ModuleCode;
     String _ModuleTitle;
+    int _ModuleCredit;
 
     // Empty constructor
     public ModuleInfo(){
@@ -21,13 +22,31 @@ public class ModuleInfo {
         this._id = id;
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
+        this._ModuleCredit = -1;
+    }
+    // constructor
+    public ModuleInfo(int id, String ModuleCode, String ModuleTitle, int ModuleCredit){
+        this._id = id;
+        this._ModuleCode = ModuleCode;
+        this._ModuleTitle = ModuleTitle;
+        this._ModuleCredit = ModuleCredit;
     }
 
     // constructor
     public ModuleInfo(String ModuleCode, String ModuleTitle){
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
+        this._ModuleCredit = -1;
     }
+
+    // constructor
+    public ModuleInfo(String ModuleCode, String ModuleTitle, int ModuleCredit){
+        this._ModuleCode = ModuleCode;
+        this._ModuleTitle = ModuleTitle;
+        this._ModuleCredit = ModuleCredit;
+
+    }
+
     // getting ID
     public int getID(){
         return this._id;
@@ -48,7 +67,7 @@ public class ModuleInfo {
         this._ModuleCode = name;
     }
 
-    // getting phone number
+    // getting Module title
     public String getModuleTitle(){
         return this._ModuleTitle;
     }
@@ -56,5 +75,17 @@ public class ModuleInfo {
     // setting phone number
     public void setModuleTitle(String phone_number){
         this._ModuleTitle = phone_number;
+    }
+
+    //setting Module credit
+    public void setModuleCredit(int credit)
+    {
+        this._ModuleCredit = credit;
+    }
+
+    //getting module credit
+    public int getModuleCredit()
+    {
+        return _ModuleCredit;
     }
 }
