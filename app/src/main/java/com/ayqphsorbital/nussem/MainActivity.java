@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.SearchRecentSuggestions;
@@ -16,14 +15,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -33,12 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.PrivateKey;
 import java.util.List;
-
-import static android.os.Process.*;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -109,9 +101,10 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         //Create Database
-
-        //BackgroundDBupdater = new DBupdate();
-        //BackgroundDBupdater.run();
+        if (db.getModsCount()<10) {
+            BackgroundDBupdater = new DBupdate();
+            BackgroundDBupdater.run();
+        };
 
 
         //creating the button to add semesters
@@ -214,12 +207,16 @@ public class MainActivity extends AppCompatActivity implements
                     new JsonHttpResponseHandler() {
 
                         @Override
-                        public void onSuccess(JSONArray jsonArray) {
+                        public void onSuccess(final JSONArray jsonArray) {
                             //Displays results
 
-                                Log.d("Insert: ", "Inserting ..");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                            for (int i = 0; i < 10; i++) {
+                                    Log.d("Insert: ", "Inserting ..");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
                                 try {
                                     String ModuleCode = jsonArray.getJSONObject(i).optString("ModuleCode");
                                     String ModuleTitle = jsonArray.getJSONObject(i).optString("ModuleTitle");
@@ -227,9 +224,14 @@ public class MainActivity extends AppCompatActivity implements
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            }
-                            Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
 
+                            }
+                                    Log.d("Insert: ", "Finished inserting DB ..");
+
+                        }
+                            }).start();
+
+                            Toast.makeText(getApplicationContext(), "Success ", Toast.LENGTH_LONG).show();
                         }
 
                         @Override

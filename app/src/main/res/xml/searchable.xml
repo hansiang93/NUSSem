@@ -3,5 +3,10 @@
     android:label="@string/app_label"
     android:hint="@string/search_hint"
     android:searchSuggestAuthority="com.ayqphsorbital.nussem.MySuggestionProvider"
-    android:searchSuggestSelection=" ?" >
+    android:searchSuggestIntentAction="android.Intent.action.VIEW">
+
+
+    <!--android:searchSuggestSelection=" ?"-->
+
+
 </searchable>
