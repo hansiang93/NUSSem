@@ -2,6 +2,7 @@ package com.ayqphsorbital.nussem;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -70,7 +72,14 @@ public class MainPage extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =inflater.inflate(R.layout.fragment_main_page, container, false);
-        Button button = (Button) v.findViewById(R.id.addsem);
+
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        db.getReadableDatabase();
+        Cursor mCursor = db.getAllModsFromSem();
+        ListView modulelist = (ListView)v.findViewById(R.id.listview);
+        CustomAdapter myListAdapter;
+        myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
+        modulelist.setAdapter(myListAdapter);
 
         return v;
     }

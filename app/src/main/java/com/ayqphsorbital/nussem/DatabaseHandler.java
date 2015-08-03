@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.design.widget.TabLayout;
+import android.widget.SimpleCursorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -26,12 +27,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Contacts table name
     private static final String TABLE_MODULES = "ModuleInfo";
     private static final String SEM_ONE = "Sem_One";
+    private static final String OVERVIEW = "Overview";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "_id";
     private static final String KEY_CODE = "ModuleCode";
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
+    private static final String KEY_SEMESTER = "SEMESTER";
 
 
     public DatabaseHandler(Context context) {
@@ -52,6 +55,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
 
+        String CREATE_OVERVIEW_TABLE = "CREATE TABLE " + OVERVIEW + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SEMESTER + " TEXT"
+                + ")";
+        db.execSQL(CREATE_OVERVIEW_TABLE);
+
+
+
 
     }
 
@@ -61,6 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODULES);
         db.execSQL("DROP TABLE IF EXISTS " + SEM_ONE);
+        db.execSQL("DROP TABLE IF EXISTS " + OVERVIEW);
 
         // Create tables again
         onCreate(db);
@@ -185,7 +196,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // updating row
         return db.update(TABLE_MODULES, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(Mod.getID()) });
+                new String[]{String.valueOf(Mod.getID())});
 
     }
 
@@ -193,10 +204,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void deleteMod (ModuleInfo Mod) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_MODULES, KEY_ID + " = ?",
-                new String[] { String.valueOf(Mod.getID()) });
+                new String[]{String.valueOf(Mod.getID())});
         db.close();
 
     }
+
+
+    public void addSemester () {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String countQuery = "SELECT  * FROM " + OVERVIEW;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int numberOfSem = cursor.getCount();
+        numberOfSem++;
+
+        String semesterNumber = "Semester " + numberOfSem;
+
+        values.put(KEY_SEMESTER, semesterNumber);
+        db.insert(OVERVIEW, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public Cursor getSemesterCursor ()
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String countQuery = "SELECT  * FROM " + OVERVIEW;
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        return cursor;
+
+    }
+
 
 
 

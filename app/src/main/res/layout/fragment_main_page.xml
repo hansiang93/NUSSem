@@ -4,19 +4,42 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add new semester"
-        android:id="@+id/addsem"
-        android:layout_gravity="right"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top">
 
-        />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add new semester"
+            android:id="@+id/addsem"
+            android:layout_gravity="right"
 
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="MAIN PAGE Blank Frag"
-        android:textSize="100sp"/>
+            />
 
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Semester 1"
+            android:id="@+id/textView"
+            android:textSize ="50sp"
+            android:gravity="center"
+            
+
+
+            />
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize ="200sp"
+
+            />
+    </LinearLayout>
 
 
 </FrameLayout>
