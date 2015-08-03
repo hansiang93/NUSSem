@@ -82,8 +82,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //deleting a module from semester 1
     public void deleteModfromsem (ModuleInfo Mod) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SEM_ONE, KEY_ID + " = ?",
-                new String[]{String.valueOf(Mod.getID())});
+
+        String whereclause = KEY_CODE + "= '" + Mod.getModuleCode() +"'";
+        String[] arguments = {};
+        db.delete(SEM_ONE, whereclause, arguments);
         db.close();
 
     }

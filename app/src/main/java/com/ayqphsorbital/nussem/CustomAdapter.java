@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +32,8 @@ public class CustomAdapter extends CursorAdapter {
         TextView modulename = (TextView) view.findViewById(R.id.adapter_ModuleName);
         TextView modulecredit = (TextView) view.findViewById(R.id.adapter_ModuleCredit);
 
-        String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
-        String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
+        final String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
+        final String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
         String credit = cursor.getString(cursor.getColumnIndex(KEY_CREDIT));
 
         modulecode.setText(code);
@@ -45,16 +46,13 @@ public class CustomAdapter extends CursorAdapter {
             public void onClick(View v) {
 
                 {
-                    /*
-                    Context context = getApplicationContext();
-                    int credit = Integer.parseInt(ModuleCredit);
-
-                    ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
-
                     DatabaseHandler db = new DatabaseHandler(context);
                     db.getWritableDatabase();
-                    db.addModtoSem(mod1);
-                    */
+                    ModuleInfo mod = new ModuleInfo(code, title);
+                    db.deleteModfromsem(mod);
+                    Cursor mCursor = db.getAllModsFromSem();
+                    changeCursor(mCursor);
+
                     CharSequence text = "Module Removed";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
