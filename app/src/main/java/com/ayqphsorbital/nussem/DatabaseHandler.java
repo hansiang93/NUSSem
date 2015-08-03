@@ -75,7 +75,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //values.put(KEY_CREDIT, Mod.getModuleCredit());
 
         // Inserting Row
-        db.insert(TABLE_MODULES, null, values);
+        db.insert(SEM_ONE, null, values);
         db.close(); // Closing database connection
     }
 
@@ -91,11 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting All Contacts
     public Cursor getAllModsFromSem() {
 
-        ModuleInfo test1= new ModuleInfo("cs1020", "testing", 4);
-
-        addModtoSem(test1);
-
-        String selectQuery = "SELECT " +  "*" + " FROM " + TABLE_MODULES;
+        String selectQuery = "SELECT " +  "*" + " FROM " + SEM_ONE;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

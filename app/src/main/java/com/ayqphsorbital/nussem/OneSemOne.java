@@ -71,7 +71,7 @@ public class OneSemOne extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_one_sem_one, container, false);
-        String[] fromColumns = new String[]{"ModuleTitle"};
+        String[] fromColumns = new String[]{"ModuleCode"};
         int[] toViews = {android.R.id.text1};
 
         DatabaseHandler db = new DatabaseHandler(getActivity());

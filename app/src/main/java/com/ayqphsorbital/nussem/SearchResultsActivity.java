@@ -1,6 +1,7 @@
 package com.ayqphsorbital.nussem;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,17 @@ public class SearchResultsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private AsyncHttpClient client;
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/modules/";
+    Button addmodule;
+    boolean moduleexist = false;
+    String ModuleCode;
+    String ModuleTitle;
+    String Department;
+    String ModuleDescription;
+    String ModuleCredit;
+    String Workload;
+    String Prerequisite;
+    String Preclusion;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +66,41 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         Intent intent  = getIntent();
         handleIntent(intent);
+
+        addmodule = (Button) findViewById(R.id.search_addmodule);
+        addmodule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(moduleexist)
+                {
+                    Context context = getApplicationContext();
+                    int credit = Integer.parseInt(ModuleCredit);
+
+                    ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
+
+                    DatabaseHandler db = new DatabaseHandler(context);
+                    db.getWritableDatabase();
+                    db.addModtoSem(mod1);
+                    CharSequence text = "Module Added";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                else
+                {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Module Not Found";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
+                }
+
+            }
+        });
+
+
 
     }
 
@@ -112,14 +160,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         //Displays results
-                        String ModuleCode = jsonObject.optString("ModuleCode");
-                        String ModuleTitle = jsonObject.optString("ModuleTitle");
-                        String Department = jsonObject.optString("Department");
-                        String ModuleDescription = jsonObject.optString("ModuleDescription");
-                        String ModuleCredit = jsonObject.optString("ModuleCredit");
-                        String Workload = jsonObject.optString("Workload");
-                        String Prerequisite = jsonObject.optString("Prerequisite");
-                        String Preclusion = jsonObject.optString("Preclusion");
+                        moduleexist = true;
+                        ModuleCode = jsonObject.optString("ModuleCode");
+                        ModuleTitle = jsonObject.optString("ModuleTitle");
+                        Department = jsonObject.optString("Department");
+                        ModuleDescription = jsonObject.optString("ModuleDescription");
+                        ModuleCredit = jsonObject.optString("ModuleCredit");
+                        Workload = jsonObject.optString("Workload");
+                        Prerequisite = jsonObject.optString("Prerequisite");
+                        Preclusion = jsonObject.optString("Preclusion");
                         data[0] += "Module Code: " + ModuleCode + "\n \nModule Title: " + ModuleTitle
                                 + "\n \nDepartment: " + Department + "\n \nModule Description: " +
                                 ModuleDescription + "\n \nModule Credit: " + ModuleCredit + "\n \nWorkload"
