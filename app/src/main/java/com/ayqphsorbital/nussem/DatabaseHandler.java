@@ -171,7 +171,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_MODULES;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+        
 
         // return count
         return cursor.getCount();
