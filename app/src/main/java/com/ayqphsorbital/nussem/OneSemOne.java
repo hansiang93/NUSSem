@@ -80,10 +80,16 @@ public class OneSemOne extends ListFragment {
         ListView modulelist = (ListView)rootview .findViewById(android.R.id.list);
 
 
+        /*
         SimpleCursorAdapter mListAdapter;
         mListAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, mCursor,fromColumns, toViews, 0);
 
         modulelist.setAdapter(mListAdapter);
+        */
+
+        CustomAdapter myListAdapter;
+        myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
+        modulelist.setAdapter(myListAdapter);
 
         return rootview;
     }
