@@ -6,6 +6,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -21,6 +23,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     DatabaseHandler db;
     DBupdate BackgroundDBupdater;
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
+    private static final String KEY_SEMESTER = "SEMESTER";
 
 
     @Override
@@ -69,16 +74,15 @@ public class MainActivity extends AppCompatActivity implements
         // Tie DrawerLayout events to the ActionBarToggle
         dlDrawer.setDrawerListener(drawerToggle);
 
+        db = new DatabaseHandler(this);
 
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
+
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
         drawerToggle.syncState();
-
-        db = new DatabaseHandler(this);
-
 
         //Recents suggestions for searchbar
         Intent intent = getIntent();
@@ -126,7 +130,25 @@ public class MainActivity extends AppCompatActivity implements
                         return true;
                     }
                 });
+
+        /*
+        DatabaseHandler data = new DatabaseHandler(this);
+        data.addSemester();
+        Cursor cursor = data.getSemesterCursor();
+        String[] fromColumns = new String[]{KEY_SEMESTER};
+        int[] toViews = {android.R.id.text1};
+        SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1
+                , cursor, fromColumns, toViews, 0);
+
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(mAdapter);
+
+        */
+
+
     }
+
+
 
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the planet to show based on

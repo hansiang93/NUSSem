@@ -33,6 +33,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/modules/";
     Button addmodule;
     boolean moduleexist = false;
+    private static final String SEM_ONE = "Sem_One";
     String ModuleCode;
     String ModuleTitle;
     String Department;
@@ -41,6 +42,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     String Workload;
     String Prerequisite;
     String Preclusion;
+
 
 
     @Override
@@ -74,18 +76,28 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                 if(moduleexist)
                 {
+
                     Context context = getApplicationContext();
                     int credit = Integer.parseInt(ModuleCredit);
-
+                    DatabaseHandler db = new DatabaseHandler(context);
                     ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
 
-                    DatabaseHandler db = new DatabaseHandler(context);
-                    db.getWritableDatabase();
-                    db.addModtoSem(mod1);
-                    CharSequence text = "Module Added";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    if(!db.exist(mod1,SEM_ONE )) {
+
+
+                        db.getWritableDatabase();
+                        db.addModtoSem(mod1);
+                        CharSequence text = "Module Added";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                    else{
+                        CharSequence text = "Module Already Added!";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
                 else
                 {

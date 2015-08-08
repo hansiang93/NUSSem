@@ -32,6 +32,7 @@ public class OneSemOne extends ListFragment {
     private String mParam1;
     private String mParam2;
     private ListView mListView;
+    CustomAdapter myListAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,7 +81,7 @@ public class OneSemOne extends ListFragment {
         ListView modulelist = (ListView)rootview .findViewById(android.R.id.list);
 
 
-        CustomAdapter myListAdapter;
+
         myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
         modulelist.setAdapter(myListAdapter);
 
@@ -95,6 +96,16 @@ public class OneSemOne extends ListFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        db.getReadableDatabase();
+        Cursor mCursor = db.getAllModsFromSem();
+        myListAdapter.changeCursor(mCursor);
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -104,6 +115,8 @@ public class OneSemOne extends ListFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {

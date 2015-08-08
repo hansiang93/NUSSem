@@ -29,10 +29,22 @@ public class MainPage extends Fragment implements View.OnClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ListView modulelist;
+    CustomAdapter myListAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        db.getReadableDatabase();
+        Cursor mCursor = db.getAllModsFromSem();
+        myListAdapter.changeCursor(mCursor);
+
+    }
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,8 +88,7 @@ public class MainPage extends Fragment implements View.OnClickListener {
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
         Cursor mCursor = db.getAllModsFromSem();
-        ListView modulelist = (ListView)v.findViewById(R.id.listview);
-        CustomAdapter myListAdapter;
+        modulelist = (ListView)v.findViewById(R.id.listview);
         myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
         modulelist.setAdapter(myListAdapter);
 

@@ -236,6 +236,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    public boolean exist(ModuleInfo mod, String tablename)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String modulename = mod.getModuleTitle();
+        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_TITLE + " = '" + modulename + "'" ;
+        Cursor data = db.rawQuery(command, null);
+        return data.moveToFirst();
+
+    }
+
 
 
 
