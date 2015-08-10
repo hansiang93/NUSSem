@@ -164,7 +164,9 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.one_sem_two:
                 fragmentClass = OneSemTwo.class;
                 break;
-
+            case R.id.nav_third_fragment:
+                //  fragmentClass = ThirdFragment.class;
+                break;
             default:
                 fragmentClass = MainPage.class;
         }

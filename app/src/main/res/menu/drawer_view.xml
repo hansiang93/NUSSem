@@ -2,7 +2,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/main_page"
-            android:title="Overview" />
+            android:title="Main Page?" />
+        <item
+            android:id="@+id/nav_second_fragment"
+            android:title="Placehold" />
+        <item
+            android:id="@+id/nav_third_fragment"
+            android:title="Placehold" />
 
         <item android:title="@string/Year_One">
             <menu>
