@@ -23,10 +23,13 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/dark_blue"
             android:text="Semester 1"
-            android:id="@+id/textView"
-            android:textSize ="50sp"
+            android:id="@+id/sem1"
+            android:textSize ="30sp"
             android:gravity="center"
+            android:textStyle="bold"
+
             
 
 
@@ -38,6 +41,17 @@
             android:layout_height="wrap_content"
             android:textSize ="200sp"
 
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_blue"
+            android:text="Semester 2"
+            android:id="@+id/sem2"
+            android:textSize ="30sp"
+            android:gravity="center"
+            android:textStyle="bold"
             />
     </LinearLayout>
 
