@@ -18,14 +18,18 @@ public class CustomAdapter extends CursorAdapter {
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
     Button removemod;
+    int semnum;
 
     // Default constructor
-    public CustomAdapter(Context context, Cursor cursor, int flags) {
+    public CustomAdapter(Context context, Cursor cursor, int flags, int sem) {
         super(context, cursor, flags);
         cursorInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
 
+        semnum = sem;
+
     }
+
 
     public void bindView(final View view, final Context context, Cursor cursor) {
         TextView modulecode = (TextView) view.findViewById(R.id.adapter_ModuleCode);
@@ -50,7 +54,7 @@ public class CustomAdapter extends CursorAdapter {
                     db.getWritableDatabase();
                     ModuleInfo mod = new ModuleInfo(code, title);
                     db.deleteModfromsem(mod);
-                    Cursor mCursor = db.getAllModsFromSem();
+                    Cursor mCursor = db.getAllModsFromSem(semnum);
                     changeCursor(mCursor);
 
                     CharSequence text = "Module Removed";

@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 14;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -60,11 +60,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ")";
         db.execSQL(CREATE_OVERVIEW_TABLE);
 
+        //adding semester one to the overview table, otherwise there will be a bug
+        //when you try to add modules but there is no overview table to display it
+        ContentValues values = new ContentValues();
+        String countQuery = "SELECT  * FROM " + OVERVIEW;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int numberOfSem = cursor.getCount();
+        numberOfSem++;
+        String semesterNumber = "" + numberOfSem;
+        values.put(KEY_SEMESTER, semesterNumber);
+        db.insert(OVERVIEW, null, values);
 
+    }
 
-
-
-
+    private void createtable(int semnumber)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        String tablename = "SEM_"+semnumber;
+        String CREATE_SEM1_TABLE = "CREATE TABLE " + tablename + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER" + ")";
+        db.execSQL(CREATE_SEM1_TABLE);
+        return;
     }
 
     @Override
@@ -104,14 +121,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting All Contacts
-    public Cursor getAllModsFromSem() {
+    public Cursor getAllModsFromSem(int semnum) {
 
-        String selectQuery = "SELECT " +  "*" + " FROM " + SEM_ONE;
+        String tablename = "SEM_"+semnum;
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(semnum == 1) {
 
-        return cursor;
+            String selectQuery = "SELECT " + "*" + " FROM " + SEM_ONE;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            return cursor;
+        }
+        else
+        {
+            String selectQuery = "SELECT " + "*" + " FROM " + tablename;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            return cursor;
+
+        }
     }
 
 
@@ -220,8 +252,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(countQuery, null);
         int numberOfSem = cursor.getCount();
         numberOfSem++;
+        createtable(numberOfSem);
 
-        String semesterNumber = "Semester " + numberOfSem;
+        String semesterNumber = "" + numberOfSem;
 
         values.put(KEY_SEMESTER, semesterNumber);
         db.insert(OVERVIEW, null, values);
@@ -248,6 +281,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return data.moveToFirst();
 
     }
+
+
+
+
 
 
 

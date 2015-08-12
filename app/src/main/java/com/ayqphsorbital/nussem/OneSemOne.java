@@ -77,12 +77,12 @@ public class OneSemOne extends ListFragment {
 
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
-        Cursor mCursor = db.getAllModsFromSem();
+        Cursor mCursor = db.getAllModsFromSem(1);
         ListView modulelist = (ListView)rootview .findViewById(android.R.id.list);
 
 
 
-        myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
+        myListAdapter = new CustomAdapter(getActivity(), mCursor, 0,1);
         modulelist.setAdapter(myListAdapter);
 
         return rootview;
@@ -100,7 +100,7 @@ public class OneSemOne extends ListFragment {
         super.onResume();
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
-        Cursor mCursor = db.getAllModsFromSem();
+        Cursor mCursor = db.getAllModsFromSem(1);
         myListAdapter.changeCursor(mCursor);
 
     }

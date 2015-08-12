@@ -20,6 +20,7 @@ public class semesteradapter extends CursorAdapter  {
     ListView modulelist;
     CustomAdapter myListAdapter;
     private static final String KEY_SEMESTER = "SEMESTER";
+    String semnum;
 
 
     // Default constructor
@@ -34,15 +35,14 @@ public class semesteradapter extends CursorAdapter  {
         TextView semesternum = (TextView) view.findViewById(R.id.semtemp);
         modulelist = (ListView) view.findViewById(R.id.listviewtemp);
 
-        final String semnum = cursor.getString(cursor.getColumnIndex(KEY_SEMESTER));
-        String semetertext =  semnum;
-
-        semesternum.setText(semetertext);
+        semnum = cursor.getString(cursor.getColumnIndex(KEY_SEMESTER));
+        String semtext = "Semester " + semnum;
+        semesternum.setText(semtext);
 
         DatabaseHandler db = new DatabaseHandler(context);
         db.getReadableDatabase();
-        Cursor mCursor = db.getAllModsFromSem();
-        myListAdapter = new CustomAdapter(context, mCursor, 0);
+        Cursor mCursor = db.getAllModsFromSem(Integer.parseInt(semnum)); //the integer.parseInt changes a string into an integer
+        myListAdapter = new CustomAdapter(context, mCursor, 0, Integer.parseInt(semnum));
         modulelist.setAdapter(myListAdapter);
 
     }
