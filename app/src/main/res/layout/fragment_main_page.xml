@@ -19,22 +19,6 @@
 
             />
 
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/dark_blue"
-            android:text="Semester 1"
-            android:id="@+id/sem1"
-            android:textSize ="30sp"
-            android:gravity="center"
-            android:textStyle="bold"
-
-            
-
-
-            />
-
         <ListView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/listview"
             android:layout_width="fill_parent"
@@ -43,16 +27,7 @@
 
             />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/dark_blue"
-            android:text="Semester 2"
-            android:id="@+id/sem2"
-            android:textSize ="30sp"
-            android:gravity="center"
-            android:textStyle="bold"
-            />
+
     </LinearLayout>
 
 

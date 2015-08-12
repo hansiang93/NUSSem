@@ -29,8 +29,9 @@ public class MainPage extends Fragment implements View.OnClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ListView modulelist;
-    CustomAdapter myListAdapter;
+    ListView semesterlist;
+    semesteradapter myListAdapter;
+    Button addsem;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -41,7 +42,7 @@ public class MainPage extends Fragment implements View.OnClickListener {
         super.onResume();
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
-        Cursor mCursor = db.getAllModsFromSem();
+        Cursor mCursor = db.getSemesterCursor();
         myListAdapter.changeCursor(mCursor);
 
     }
@@ -77,6 +78,7 @@ public class MainPage extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -87,10 +89,33 @@ public class MainPage extends Fragment implements View.OnClickListener {
 
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
-        Cursor mCursor = db.getAllModsFromSem();
-        modulelist = (ListView)v.findViewById(R.id.listview);
-        myListAdapter = new CustomAdapter(getActivity(), mCursor, 0);
-        modulelist.setAdapter(myListAdapter);
+        Cursor mCursor = db.getSemesterCursor();
+        semesterlist = (ListView)v.findViewById(R.id.listview);
+        myListAdapter = new semesteradapter(getActivity(), mCursor, 0);
+        semesterlist.setAdapter(myListAdapter);
+
+        addsem = (Button) v.findViewById(R.id.addsem);
+        addsem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                {
+                    DatabaseHandler db = new DatabaseHandler(getActivity());
+                    db.getWritableDatabase();
+                    db.addSemester();
+                    Cursor mCursor = db.getSemesterCursor();
+                    myListAdapter.changeCursor(mCursor);
+
+                    CharSequence text = "Semester Added";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(getActivity(), text, duration);
+                    toast.show();
+                }
+
+
+            }
+        });
+
 
         return v;
     }

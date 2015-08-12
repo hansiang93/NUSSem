@@ -131,19 +131,21 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*
+/*
         DatabaseHandler data = new DatabaseHandler(this);
         data.addSemester();
-        Cursor cursor = data.getSemesterCursor();
-        String[] fromColumns = new String[]{KEY_SEMESTER};
+        //Cursor cursor = data.getSemesterCursor();
+        Cursor cursor = db.getAllModsFromSem();
+        //String[] fromColumns = new String[]{KEY_SEMESTER};
+        String[] fromColumns = new String[]{"ModuleCode"};
         int[] toViews = {android.R.id.text1};
         SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1
                 , cursor, fromColumns, toViews, 0);
 
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(mAdapter);
+*/
 
-        */
 
 
     }

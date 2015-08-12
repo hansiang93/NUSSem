@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 12;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -59,6 +59,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SEMESTER + " TEXT"
                 + ")";
         db.execSQL(CREATE_OVERVIEW_TABLE);
+
+
 
 
 
@@ -228,6 +230,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public Cursor getSemesterCursor ()
     {
+
         SQLiteDatabase db = getReadableDatabase();
         String countQuery = "SELECT  * FROM " + OVERVIEW;
         Cursor cursor = db.rawQuery(countQuery, null);
