@@ -19,6 +19,21 @@
         android:gravity="center"
         android:textStyle="bold"
         />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/semadapter_linear"
+
+
+        >
+
+
+    </LinearLayout>
+
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listviewtemp"

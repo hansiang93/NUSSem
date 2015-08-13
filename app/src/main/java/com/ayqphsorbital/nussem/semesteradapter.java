@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +45,12 @@ public class semesteradapter extends CursorAdapter  {
         DatabaseHandler db = new DatabaseHandler(context);
         db.getReadableDatabase();
         Cursor mCursor = db.getAllModsFromSem(Integer.parseInt(semnum)); //the integer.parseInt changes a string into an integer
-        myListAdapter = new CustomAdapter(context, mCursor, 0, Integer.parseInt(semnum));
-        modulelist.setAdapter(myListAdapter);
+        LinearLayout parentlinear = (LinearLayout) view.findViewById(R.id.semadapter_linear);
+        parentlinear.removeAllViews();
+        ModuleDisplay lineardisplay = new ModuleDisplay(context,parentlinear,mCursor,Integer.parseInt(semnum));
+
+        //myListAdapter = new CustomAdapter(context, mCursor, 0, Integer.parseInt(semnum));
+        //modulelist.setAdapter(myListAdapter);
 
         semesternum.setOnClickListener(new View.OnClickListener() {
             @Override
