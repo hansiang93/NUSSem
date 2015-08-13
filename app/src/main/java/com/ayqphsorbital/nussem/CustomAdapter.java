@@ -53,7 +53,7 @@ public class CustomAdapter extends CursorAdapter {
                     DatabaseHandler db = new DatabaseHandler(context);
                     db.getWritableDatabase();
                     ModuleInfo mod = new ModuleInfo(code, title);
-                    db.deleteModfromsem(mod);
+                    db.deleteModfromsem(mod,semnum);
                     Cursor mCursor = db.getAllModsFromSem(semnum);
                     changeCursor(mCursor);
 

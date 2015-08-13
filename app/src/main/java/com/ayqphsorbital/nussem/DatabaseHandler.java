@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 16;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -97,7 +97,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //adding a module to semester 1
-    public void addModtoSem (ModuleInfo Mod) {
+    public void addModtoSem (ModuleInfo Mod, int semnum) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_CODE, Mod.getModuleCode()); // Module Code
@@ -105,18 +105,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //values.put(KEY_CREDIT, Mod.getModuleCredit());
 
         // Inserting Row
-        db.insert(SEM_ONE, null, values);
-        db.close(); // Closing database connection
+        if(semnum == 1) {
+            db.insert(SEM_ONE, null, values);
+            db.close(); // Closing database connection
+        }
+        else
+        {
+            String tablename = "SEM_"+semnum;
+            db.insert(tablename, null, values);
+            db.close();
+
+        }
     }
 
     //deleting a module from semester 1
-    public void deleteModfromsem (ModuleInfo Mod) {
+    public void deleteModfromsem (ModuleInfo Mod, int semnum) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String whereclause = KEY_CODE + "= '" + Mod.getModuleCode() +"'";
-        String[] arguments = {};
-        db.delete(SEM_ONE, whereclause, arguments);
-        db.close();
+        if(semnum ==1) {
+
+            String whereclause = KEY_CODE + "= '" + Mod.getModuleCode() + "'";
+            String[] arguments = {};
+            db.delete(SEM_ONE, whereclause, arguments);
+            db.close();
+        }
+        else
+        {
+            String tablename = "SEM_"+semnum;
+            String whereclause = KEY_CODE + "= '" + Mod.getModuleCode() + "'";
+            String[] arguments = {};
+            db.delete(tablename, whereclause, arguments);
+            db.close();
+
+        }
 
     }
 
@@ -272,16 +293,42 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean exist(ModuleInfo mod, String tablename)
+    public boolean existinallsem(ModuleInfo mod)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String countQuery = "SELECT  * FROM " + OVERVIEW;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int numberOfSem = cursor.getCount();
+
+        String modulename = mod.getModuleTitle();
+
+        for(int i = 1; i <= numberOfSem; i++ )
+        {
+            if(i==1) //This is done because sem_one table has a different name from all the other semesters
+            {
+                if(existinsem(mod,SEM_ONE))
+                    return true;
+            }
+            else
+            {
+                String tablename = "SEM_"+i;
+                if(existinsem(mod, tablename))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existinsem(ModuleInfo mod, String tablename)
     {
         SQLiteDatabase db = getReadableDatabase();
         String modulename = mod.getModuleTitle();
-        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_TITLE + " = '" + modulename + "'" ;
+        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_TITLE + " = '" + modulename + "'";
         Cursor data = db.rawQuery(command, null);
         return data.moveToFirst();
 
     }
-
 
 
 

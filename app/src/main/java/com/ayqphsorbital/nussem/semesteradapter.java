@@ -32,12 +32,14 @@ public class semesteradapter extends CursorAdapter  {
     }
 
     public void bindView(final View view, final Context context, Cursor cursor) {
+
         TextView semesternum = (TextView) view.findViewById(R.id.semtemp);
         modulelist = (ListView) view.findViewById(R.id.listviewtemp);
 
         semnum = cursor.getString(cursor.getColumnIndex(KEY_SEMESTER));
         String semtext = "Semester " + semnum;
         semesternum.setText(semtext);
+        semesternum.setTag(Integer.parseInt(semnum));
 
         DatabaseHandler db = new DatabaseHandler(context);
         db.getReadableDatabase();
@@ -45,11 +47,29 @@ public class semesteradapter extends CursorAdapter  {
         myListAdapter = new CustomAdapter(context, mCursor, 0, Integer.parseInt(semnum));
         modulelist.setAdapter(myListAdapter);
 
+        semesternum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                {
+                    int position = (Integer) v.getTag();
+                    ((MainActivity) context).addingmod(position);
+                }
+
+
+            }
+        });
+
     }
 
 
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+    public View newView(final Context context, Cursor cursor, ViewGroup parent) {
         // R.layout.list_row is your xml layout for each row
-        return cursorInflater.inflate(R.layout.semadapter, parent, false);
+        View view = cursorInflater.inflate(R.layout.semadapter, parent, false);
+
+
+
+        return view;
+
     }
 }

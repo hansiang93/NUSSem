@@ -42,6 +42,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     String Workload;
     String Prerequisite;
     String Preclusion;
+    int key = 1;
 
 
 
@@ -82,15 +83,18 @@ public class SearchResultsActivity extends AppCompatActivity {
                     DatabaseHandler db = new DatabaseHandler(context);
                     ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
 
-                    if(!db.exist(mod1,SEM_ONE )) {
+                    if(!db.existinallsem(mod1)) {
 
-
-                        db.getWritableDatabase();
-                        db.addModtoSem(mod1);
-                        CharSequence text = "Module Added";
-                        int duration = Toast.LENGTH_SHORT;
+                        CharSequence text = "Select semester for module to be added";
+                        int duration = Toast.LENGTH_LONG;
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
+
+                        Intent semIntent = new Intent();
+                        semIntent.setClass(SearchResultsActivity.this, MainActivity.class);
+                        startActivityForResult(semIntent, key);
+
+
                     }
                     else{
                         CharSequence text = "Module Already Added!";
@@ -114,6 +118,21 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String semnum = data.getStringExtra("Semester");
+        DatabaseHandler db = new DatabaseHandler(this);
+        int credit = Integer.parseInt(ModuleCredit);
+        ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
+        db.addModtoSem(mod1, Integer.parseInt(semnum));
+        CharSequence text = "Module Added";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 
     //Search functions
