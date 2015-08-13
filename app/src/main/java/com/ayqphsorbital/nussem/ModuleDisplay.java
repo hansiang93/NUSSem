@@ -66,8 +66,7 @@ public class ModuleDisplay{
                         Cursor mCursor = db.getAllModsFromSem(semnum);
                         ParentView.removeAllViews();
                         ModuleDisplay renew = new ModuleDisplay(context,ParentView, mCursor,semnum);
-                        //changeCursor(mCursor); //temporary making this not work for now
-                        //eventually need to make it work otherwise the view will not refresh
+
 
                         CharSequence text = "Module Removed";
                         int duration = Toast.LENGTH_SHORT;

@@ -1,6 +1,8 @@
 package com.ayqphsorbital.nussem;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +59,12 @@ public class semesteradapter extends CursorAdapter  {
             public void onClick(View v) {
 
                 {
-                    int position = (Integer) v.getTag();
-                    ((MainActivity) context).addingmod(position);
+                    Intent data = ((Activity)context).getIntent();
+                    boolean fromsearchresultactivity = data.getBooleanExtra("query", false);
+                    if(fromsearchresultactivity) {
+                        int position = (Integer) v.getTag();
+                        ((MainActivity) context).addingmod(position);
+                    }
                 }
 
 

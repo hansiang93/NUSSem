@@ -92,6 +92,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                         Intent semIntent = new Intent();
                         semIntent.setClass(SearchResultsActivity.this, MainActivity.class);
+                        semIntent.putExtra("query", true);
                         startActivityForResult(semIntent, key);
 
 
