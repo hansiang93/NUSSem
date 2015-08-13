@@ -134,6 +134,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(this, text, duration);
         toast.show();
+
+        Intent gobacktomain = new Intent(this, MainActivity.class);
+        startActivity(gobacktomain);
+        finish();
     }
 
     //Search functions

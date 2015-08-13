@@ -62,10 +62,10 @@ public class ModuleDisplay{
                         DatabaseHandler db = new DatabaseHandler(context);
                         db.getWritableDatabase();
                         ModuleInfo mod = new ModuleInfo(code, title);
-                        db.deleteModfromsem(mod,semnum);
+                        db.deleteModfromsem(mod, semnum);
                         Cursor mCursor = db.getAllModsFromSem(semnum);
                         ParentView.removeAllViews();
-                        ModuleDisplay renew = new ModuleDisplay(context,ParentView, mCursor,semnum);
+                        ModuleDisplay renew = new ModuleDisplay(context, ParentView, mCursor, semnum);
 
 
                         CharSequence text = "Module Removed";
@@ -76,6 +76,21 @@ public class ModuleDisplay{
 
 
                 }
+            });
+
+            ChildView.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View v) {
+
+                    CharSequence text = "Long Press";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
+                    return true;
+                }
+
             });
 
 
