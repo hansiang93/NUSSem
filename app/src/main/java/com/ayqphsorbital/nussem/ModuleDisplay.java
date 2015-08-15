@@ -1,12 +1,17 @@
 package com.ayqphsorbital.nussem;
 
+import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,10 +88,15 @@ public class ModuleDisplay{
                 @Override
                 public boolean onLongClick(View v) {
 
-                    CharSequence text = "Long Press";
+
+                    Intent data = new Intent(context, SearchResultsActivity.class);
+                    data.putExtra("SPECIAL",true);
+                    data.putExtra("QUERY", code);
+                    CharSequence text = "module info";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                    context.startActivity(data);
 
                     return true;
                 }
