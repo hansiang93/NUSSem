@@ -140,6 +140,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         toast.show();
 
         Intent gobacktomain = new Intent(this, MainActivity.class);
+        gobacktomain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(gobacktomain);
         finish();
     }
@@ -169,6 +170,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         // Query your data set and show results
         // ...
         queryNUSMods(query);
+
 
     }
 
