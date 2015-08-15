@@ -28,6 +28,8 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
     private TextView ResultsList;
+    private TextView ModCode;
+    private TextView ModTitle;
     private Toolbar toolbar;
     private AsyncHttpClient client;
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/modules/";
@@ -51,6 +53,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_search);
         ResultsList = (TextView) findViewById(R.id.list);
+        ModCode = (TextView) findViewById(R.id.ModCode);
+        ModTitle = (TextView) findViewById(R.id.ModTitle);
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -154,6 +158,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
+            setTitle(query.toUpperCase());
 
             showResults(query);
         }
@@ -198,15 +203,16 @@ public class SearchResultsActivity extends AppCompatActivity {
                         //Displays results
                         moduleexist = true;
                         ModuleCode = jsonObject.optString("ModuleCode");
+                        ModCode.setText(ModuleCode);
                         ModuleTitle = jsonObject.optString("ModuleTitle");
+                        ModTitle.setText(ModuleTitle);
                         Department = jsonObject.optString("Department");
                         ModuleDescription = jsonObject.optString("ModuleDescription");
                         ModuleCredit = jsonObject.optString("ModuleCredit");
                         Workload = jsonObject.optString("Workload");
                         Prerequisite = jsonObject.optString("Prerequisite");
                         Preclusion = jsonObject.optString("Preclusion");
-                        data[0] += "Module Code: " + ModuleCode + "\n \nModule Title: " + ModuleTitle
-                                + "\n \nDepartment: " + Department + "\n \nModule Description: " +
+                        data[0] += "Department: " + Department + "\n \nModule Description: " +
                                 ModuleDescription + "\n \nModule Credit: " + ModuleCredit + "\n \nWorkload"
                                 + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
                                 Preclusion + "\n";

@@ -19,14 +19,42 @@
         android:layout_height="wrap_content"
         android:text="Add module"
         android:id="@+id/search_addmodule"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:padding="10sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ModCode"
+        android:text="MODCODE"
+        android:textSize="50sp"
+        android:paddingLeft="10sp"
+        android:paddingBottom="0sp"
+        android:textStyle="bold"
+        android:typeface="normal">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ModTitle"
+        android:text="MODTITLE"
+        android:textSize="28sp"
+        android:paddingLeft="10sp"
+        android:paddingBottom="3sp"
+        android:textStyle="italic"
+        android:typeface="monospace">
+
+    </TextView>
 
         <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list"
+            android:text="Mod Text"
         android:padding="10sp"
-        >
+            android:background="#e1e1e1">
 
     </TextView>
 
