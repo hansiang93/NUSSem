@@ -92,15 +92,18 @@ public class SearchResultsActivity extends AppCompatActivity implements
 
                     if(!db.existinallsem(mod1)) {
 
+                        Intent semIntent = new Intent();
+                        semIntent.setClass(SearchResultsActivity.this, MainActivity.class);
+                        semIntent.putExtra("modulecode", ModuleCode);
+                        semIntent.putExtra("modulecredit", ModuleCredit);
+                        semIntent.putExtra("moduletitle", ModuleTitle);
+                        semIntent.putExtra("AddingModule", true);
+                        startActivity(semIntent);
+
                         CharSequence text = "Select semester for module to be added";
                         int duration = Toast.LENGTH_LONG;
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
-
-                        Intent semIntent = new Intent();
-                        semIntent.setClass(SearchResultsActivity.this, MainActivity.class);
-                        semIntent.putExtra("query", true);
-                        startActivityForResult(semIntent, key);
 
 
                     }
@@ -144,26 +147,6 @@ public class SearchResultsActivity extends AppCompatActivity implements
 
 
         return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        String semnum = data.getStringExtra("Semester");
-        DatabaseHandler db = new DatabaseHandler(this);
-        int credit = Integer.parseInt(ModuleCredit);
-        ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
-        db.addModtoSem(mod1, Integer.parseInt(semnum));
-        CharSequence text = "Module Added";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-
-        Intent gobacktomain = new Intent(this, MainActivity.class);
-        gobacktomain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(gobacktomain);
-        finish();
     }
 
     //Search functions
@@ -238,6 +221,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
                         //Displays results
                         moduleexist = true;
                         ModuleCode = jsonObject.optString("ModuleCode");
+
                         ModCode.setText(ModuleCode);
                         ModuleTitle = jsonObject.optString("ModuleTitle");
                         ModTitle.setText(ModuleTitle);

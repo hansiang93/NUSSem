@@ -47,12 +47,9 @@ public class semesteradapter extends CursorAdapter  {
         DatabaseHandler db = new DatabaseHandler(context);
         db.getReadableDatabase();
         Cursor mCursor = db.getAllModsFromSem(Integer.parseInt(semnum)); //the integer.parseInt changes a string into an integer
-        LinearLayout parentlinear = (LinearLayout) view.findViewById(R.id.semadapter_linear);
+        final LinearLayout parentlinear = (LinearLayout) view.findViewById(R.id.semadapter_linear);
         parentlinear.removeAllViews();
         ModuleDisplay lineardisplay = new ModuleDisplay(context,parentlinear,mCursor,Integer.parseInt(semnum));
-
-        //myListAdapter = new CustomAdapter(context, mCursor, 0, Integer.parseInt(semnum));
-        //modulelist.setAdapter(myListAdapter);
 
         semesternum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +57,33 @@ public class semesteradapter extends CursorAdapter  {
 
                 {
                     Intent data = ((Activity)context).getIntent();
-                    boolean fromsearchresultactivity = data.getBooleanExtra("query", false);
-                    if(fromsearchresultactivity) {
-                        int position = (Integer) v.getTag();
-                        ((MainActivity) context).addingmod(position);
+                    if(data.getBooleanExtra("AddingModule", false))
+                    {
+                        //geting the module data from the intent
+                        String ModuleCode = data.getStringExtra("modulecode");
+                        String ModuleTitle = data.getStringExtra("moduletitle");
+                        String ModuleCredit = data.getStringExtra("modulecredit");
+                        DatabaseHandler db = new DatabaseHandler(context);
+                        int credit = Integer.parseInt(ModuleCredit);
+                        ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
+                        int position = (Integer) v.getTag(); //get the position which the button is clicked. Refers to which sem it is
+                        db.addModtoSem(mod1, position);
+                        Cursor mCursor = db.getAllModsFromSem(position);
+                        parentlinear.removeAllViews();
+
+                        //the refreshing of the linear layout view is in the constructor of moduledisplay
+                        ModuleDisplay renew = new ModuleDisplay(context, parentlinear, mCursor, position); //Refreshes the linear layout view in the semester "position"
+
+                        CharSequence text = "Module Added";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+
+                        data.removeExtra("AddingModule");
+
+
                     }
+
                 }
 
 

@@ -354,18 +354,4 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-
-    public void addingmod(int semnum)
-    {
-        // recieve semnum from semester adapter when you click the semester button
-        Intent returnIntent = new Intent();
-        String tostring = "" + semnum; //When you recieve it, it must be a string
-        returnIntent.putExtra("Semester", tostring);
-        setResult(RESULT_OK,returnIntent);
-
-        finish();
-
-    }
-
-
 }

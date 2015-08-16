@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ModCode"
-        android:text="MODCODE"
+        android:text="Loading..."
         android:textSize="50sp"
         android:paddingLeft="10sp"
         android:paddingBottom="0sp"
@@ -43,7 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ModTitle"
-        android:text="MODTITLE"
         android:textSize="28sp"
         android:paddingLeft="10sp"
         android:paddingBottom="3sp"
@@ -56,7 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list"
-            android:text="Mod Text"
         android:padding="10sp"
             android:background="#e1e1e1">
 

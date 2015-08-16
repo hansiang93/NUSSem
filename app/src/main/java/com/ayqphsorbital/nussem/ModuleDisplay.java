@@ -111,48 +111,6 @@ public class ModuleDisplay{
     }
 
 
-    private View bindView(final Context context, Cursor cursor) {
-
-        View ChildView =  cursorInflater.inflate(R.layout.adapter, null);
-
-        TextView modulecode = (TextView) ChildView.findViewById(R.id.adapter_ModuleCode);
-        TextView modulename = (TextView) ChildView.findViewById(R.id.adapter_ModuleName);
-        TextView modulecredit = (TextView) ChildView.findViewById(R.id.adapter_ModuleCredit);
-
-        final String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
-        final String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
-        String credit = cursor.getString(cursor.getColumnIndex(KEY_CREDIT));
-
-        modulecode.setText(code);
-        modulecredit.setText(credit);
-        modulename.setText(title);
-
-        removemod = (Button) ChildView.findViewById(R.id.adapter_crossbutton);
-        removemod.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                {
-                    DatabaseHandler db = new DatabaseHandler(context);
-                    db.getWritableDatabase();
-                    ModuleInfo mod = new ModuleInfo(code, title);
-                    db.deleteModfromsem(mod,semnum);
-                    Cursor mCursor = db.getAllModsFromSem(semnum);
-                    //changeCursor(mCursor); //temporary making this not work for now
-                    //eventually need to make it work otherwise the view will not refresh
-
-                    CharSequence text = "Module Removed";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-
-
-            }
-        });
-
-        return ChildView;
-    }
 
 
 
