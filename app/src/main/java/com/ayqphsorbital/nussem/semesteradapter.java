@@ -1,9 +1,13 @@
 package com.ayqphsorbital.nussem;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,9 @@ public class semesteradapter extends CursorAdapter  {
     CustomAdapter myListAdapter;
     private static final String KEY_SEMESTER = "SEMESTER";
     String semnum;
+    private Fragment fragment = null;
+    private Class fragmentClass;
+    private FragmentManager fragmentManager;
 
 
     // Default constructor
@@ -50,6 +57,36 @@ public class semesteradapter extends CursorAdapter  {
         final LinearLayout parentlinear = (LinearLayout) view.findViewById(R.id.semadapter_linear);
         parentlinear.removeAllViews();
         ModuleDisplay lineardisplay = new ModuleDisplay(context,parentlinear,mCursor,Integer.parseInt(semnum));
+
+        semesternum.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                fragmentClass = semesterview.class;
+
+
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Insert the fragment by replacing any existing fragment
+
+                Bundle bundle = new Bundle();
+
+                int position = (Integer) v.getTag(); //get the position which the button is clicked. Refers to which sem it is
+                bundle.putInt("Semester", position);
+                fragment.setArguments(bundle);
+                fragmentManager = ((Activity) context).getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
+                return true;
+            }
+
+        });
 
         semesternum.setOnClickListener(new View.OnClickListener() {
             @Override

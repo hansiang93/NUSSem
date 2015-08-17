@@ -18,6 +18,7 @@
         android:textSize ="30sp"
         android:gravity="center"
         android:textStyle="bold"
+        android:longClickable="true"
         />
     <LinearLayout
         android:orientation="vertical"

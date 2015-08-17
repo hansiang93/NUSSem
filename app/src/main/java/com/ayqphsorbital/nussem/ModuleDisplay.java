@@ -52,7 +52,7 @@ public class ModuleDisplay{
 
             final String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
             final String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
-            String credit = cursor.getString(cursor.getColumnIndex(KEY_CREDIT));
+            String credit = cursor.getInt(cursor.getColumnIndex(KEY_CREDIT)) + " MC";
 
             modulecode.setText(code);
             modulecredit.setText(credit);

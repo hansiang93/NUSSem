@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Semester"
+        android:textSize="60dp"
+        android:id="@+id/semview_header"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/dark_blue"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Module List"
+        android:id="@+id/semview_moduleheader"
+        android:gravity="start"
+        android:textSize="30dp"
+        android:padding="20dp"
+        android:textStyle="italic"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.13"
+        android:id="@+id/semview_modlist"
+
+        >
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Summary"
+        android:id="@+id/semview_summary"
+        android:gravity="start"
+        android:textSize="30dp"
+        android:textStyle="italic"
+        android:padding="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GPA"
+        android:id="@+id/semview_GPA"
+        android:layout_marginLeft="30dp"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total MC taken"
+        android:id="@+id/semview_mctotal"
+        android:layout_marginLeft="30dp"
+        android:textSize="15dp"
+        />
+</LinearLayout>

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         MainPage.OnFragmentInteractionListener,
         OneSemOne.OnFragmentInteractionListener,
         OneSemTwo.OnFragmentInteractionListener,
+        semesterview.OnFragmentInteractionListener,
         SearchView.OnQueryTextListener {
 
     private DrawerLayout dlDrawer;
@@ -186,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements
         dlDrawer.closeDrawers();
     }
 
+    @Override
+    public void onsemesterviewFragmentInteraction(Uri uri) {
+
+    }
 
 
     private class DBupdate implements Runnable {
@@ -342,6 +347,12 @@ public class MainActivity extends AppCompatActivity implements
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
+
+
+
+
 
     @Override
     public boolean onQueryTextSubmit(String query) {

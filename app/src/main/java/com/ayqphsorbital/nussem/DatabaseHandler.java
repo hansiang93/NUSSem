@@ -102,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_CODE, Mod.getModuleCode()); // Module Code
         values.put(KEY_TITLE, Mod.getModuleTitle()); // Module Title
-        //values.put(KEY_CREDIT, Mod.getModuleCredit());
+        values.put(KEY_CREDIT, Mod.getModuleCredit());
 
         // Inserting Row
         if(semnum == 1) {
