@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -39,7 +40,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
     Button addmodule;
     boolean moduleexist = false;
     private static final String SEM_ONE = "Sem_One";
-    String ModuleCode;
+    String ModuleCode = "";
     String ModuleTitle;
     String Department;
     String ModuleDescription;
@@ -213,12 +214,14 @@ public class SearchResultsActivity extends AppCompatActivity implements
 
         // Have the client get a JSONArray of data
         // and define how to respond
+        final String finalUrlString = urlString;
         client.get(QUERY_URL + urlString.toUpperCase() + "/index.json",
                 new JsonHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         //Displays results
+<<<<<<< HEAD
                         moduleexist = true;
                         ModuleCode = jsonObject.optString("ModuleCode");
 
@@ -236,12 +239,42 @@ public class SearchResultsActivity extends AppCompatActivity implements
                                 + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
                                 Preclusion + "\n";
                         ResultsList.setText(data[0]);
+=======
+
+                            moduleexist = true;
+                            ModuleCode = jsonObject.optString("ModuleCode");
+                            ModCode.setText(ModuleCode);
+                            ModuleTitle = jsonObject.optString("ModuleTitle");
+                            ModTitle.setText(ModuleTitle);
+                            Department = jsonObject.optString("Department");
+                            ModuleDescription = jsonObject.optString("ModuleDescription");
+                            ModuleCredit = jsonObject.optString("ModuleCredit");
+                            Workload = jsonObject.optString("Workload");
+                            Prerequisite = jsonObject.optString("Prerequisite");
+                            Preclusion = jsonObject.optString("Preclusion");
+                            data[0] += "Department: " + Department + "\n \nModule Description: " +
+                                    ModuleDescription + "\n \nModule Credit: " + ModuleCredit + "\n \nWorkload"
+                                    + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
+                                    Preclusion + "\n";
+                            ResultsList.setText(data[0]);
+
+                        if (ModuleCode == null) {
+                            ModCode.setText(finalUrlString.toUpperCase());
+                            ModTitle.setText("Module not found");
+                            ResultsList.setText("Please go back and try searching for a valid Module Code again.");
+                        }
+>>>>>>> origin/master
                     }
 
                     @Override
                     public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
                         // Display a "Toast" message
                         // to announce the failure
+
+                        ModCode.setText(finalUrlString.toUpperCase());
+                        ModuleCode = "error";
+                        ModTitle.setText("Module not found");
+                        ResultsList.setText("Please check that you have an active internet connection.");
                         Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
 
                         // Log error message
@@ -249,6 +282,14 @@ public class SearchResultsActivity extends AppCompatActivity implements
                         Log.e("omg android", statusCode + " " + throwable.getMessage());
                     }
                 });
+
+        if (ModuleCode == ""){
+
+            ModCode.setText(finalUrlString.toUpperCase());
+            ModTitle.setText("Module not found");
+            ResultsList.setText("Please go back and try searching for a valid Module Code again.");
+
+        }
 
     }
 
