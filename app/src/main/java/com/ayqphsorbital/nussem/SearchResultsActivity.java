@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.logging.LogRecord;
 
 /**
  * Created by HanSiang on 30/06/2015.
@@ -50,6 +52,14 @@ public class SearchResultsActivity extends AppCompatActivity implements
     String Preclusion;
     int key = 1;
     SearchView searchView;
+    String _query;
+    final Handler mHandler = new Handler();
+
+    final Runnable mUpdateResults = new Runnable() {
+        public void run() {
+            timmingoutsearch();
+        }
+    };
 
 
     @Override
@@ -177,19 +187,25 @@ public class SearchResultsActivity extends AppCompatActivity implements
                     MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             setTitle(query.toUpperCase());
-
             showResults(query);
+
+
         }
 
     }
 
-    private void showResults(String query) {
+
+
+    private void showResults(final String query) {
         // Query your data set and show results
         // ...
+        _query = query;
         queryNUSMods(query);
-
+        startcounter();
 
     }
+
+
 
 
 
@@ -221,10 +237,9 @@ public class SearchResultsActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         //Displays results
-<<<<<<< HEAD
+
                         moduleexist = true;
                         ModuleCode = jsonObject.optString("ModuleCode");
-
                         ModCode.setText(ModuleCode);
                         ModuleTitle = jsonObject.optString("ModuleTitle");
                         ModTitle.setText(ModuleTitle);
@@ -239,31 +254,13 @@ public class SearchResultsActivity extends AppCompatActivity implements
                                 + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
                                 Preclusion + "\n";
                         ResultsList.setText(data[0]);
-=======
-
-                            moduleexist = true;
-                            ModuleCode = jsonObject.optString("ModuleCode");
-                            ModCode.setText(ModuleCode);
-                            ModuleTitle = jsonObject.optString("ModuleTitle");
-                            ModTitle.setText(ModuleTitle);
-                            Department = jsonObject.optString("Department");
-                            ModuleDescription = jsonObject.optString("ModuleDescription");
-                            ModuleCredit = jsonObject.optString("ModuleCredit");
-                            Workload = jsonObject.optString("Workload");
-                            Prerequisite = jsonObject.optString("Prerequisite");
-                            Preclusion = jsonObject.optString("Preclusion");
-                            data[0] += "Department: " + Department + "\n \nModule Description: " +
-                                    ModuleDescription + "\n \nModule Credit: " + ModuleCredit + "\n \nWorkload"
-                                    + Workload + "\n \nPre-Requisite: " + Prerequisite + "\n \nPreclusion: " +
-                                    Preclusion + "\n";
-                            ResultsList.setText(data[0]);
 
                         if (ModuleCode == null) {
                             ModCode.setText(finalUrlString.toUpperCase());
                             ModTitle.setText("Module not found");
                             ResultsList.setText("Please go back and try searching for a valid Module Code again.");
                         }
->>>>>>> origin/master
+
                     }
 
                     @Override
@@ -283,13 +280,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
                     }
                 });
 
-        if (ModuleCode == ""){
 
-            ModCode.setText(finalUrlString.toUpperCase());
-            ModTitle.setText("Module not found");
-            ResultsList.setText("Please go back and try searching for a valid Module Code again.");
-
-        }
 
     }
 
@@ -303,5 +294,35 @@ public class SearchResultsActivity extends AppCompatActivity implements
     public boolean onQueryTextChange(String newText) {
         return false;
     }
+
+    private void timmingoutsearch() {
+
+        if (ModuleCode == "") {
+
+            ModCode.setText(_query.toUpperCase());
+            ModTitle.setText("Module not found");
+            ResultsList.setText("Please go back and try searching for a valid Module Code again.");
+
+        }
+
+    }
+
+    protected void startcounter() {
+
+        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
+        Thread t = new Thread() {
+            public void run() {
+                try {
+                    sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mHandler.post(mUpdateResults);
+
+            }
+        };
+        t.start();
+    }
+
 
 }
