@@ -1,7 +1,6 @@
 package com.ayqphsorbital.nussem;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -52,30 +51,14 @@ public class semesteradapter extends CursorAdapter  {
         parentlinear.removeAllViews();
         ModuleDisplay lineardisplay = new ModuleDisplay(context,parentlinear,mCursor,Integer.parseInt(semnum));
 
-        semesternum.setOnLongClickListener(new View.OnLongClickListener() {
-
+        semesternum.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-
-
-
-
-                return true;
-            }});
-
-
-
-        semesternum.setOnClickListener(new View.OnClickListener()
-
-            {
-                @Override
-                public void onClick (View v){
+            public void onClick(View v) {
 
                 {
-                    Intent data = ((Activity) context).getIntent(); //get  intent that started the main activity
-
-                    //If the intent comes from the search Result Activity to add a module
-                    if (data.getBooleanExtra("AddingModule", false)) {
+                    Intent data = ((Activity)context).getIntent();
+                    if(data.getBooleanExtra("AddingModule", false))
+                    {
                         //geting the module data from the intent
                         String ModuleCode = data.getStringExtra("modulecode");
                         String ModuleTitle = data.getStringExtra("moduletitle");
@@ -105,11 +88,9 @@ public class semesteradapter extends CursorAdapter  {
 
 
             }
-            }
+        });
 
-            );
-
-        }
+    }
 
 
     public View newView(final Context context, Cursor cursor, ViewGroup parent) {
@@ -121,41 +102,4 @@ public class semesteradapter extends CursorAdapter  {
         return view;
 
     }
-    /*
-
-    private void gotosemesterfragment(int semnum)
-    {
-        fragmentClass = OneSemOne.class;
-        switch (menuItem.getItemId()) {
-            case R.id.main_page:
-                fragmentClass = MainPage.class;
-                break;
-            case R.id.one_sem_one:
-                fragmentClass = OneSemOne.class;
-                break;
-            case R.id.one_sem_two:
-                fragmentClass = OneSemTwo.class;
-                break;
-
-            default:
-                fragmentClass = MainPage.class;
-        }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
-        dlDrawer.closeDrawers();
-    }
-    */
 }
-
