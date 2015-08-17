@@ -52,10 +52,11 @@ public class ModuleDisplay{
 
             final String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
             final String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
-            String credit = cursor.getString(cursor.getColumnIndex(KEY_CREDIT));
+            int credit = cursor.getInt(cursor.getColumnIndex(KEY_CREDIT));
+            String stringcredit = credit + "MC";
 
             modulecode.setText(code);
-            modulecredit.setText(credit);
+            modulecredit.setText(stringcredit);
             modulename.setText(title);
 
             removemod = (Button) ChildView.findViewById(R.id.adapter_crossbutton);

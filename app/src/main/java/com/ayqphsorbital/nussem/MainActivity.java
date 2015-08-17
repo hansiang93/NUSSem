@@ -21,7 +21,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
     private static final String KEY_SEMESTER = "SEMESTER";
     SearchView searchView;
+    private ListView mDrawerList;
 
 
     @Override
@@ -71,6 +74,15 @@ public class MainActivity extends AppCompatActivity implements
         // Find our drawer view
         dlDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
+        mDrawerList = (ListView) findViewById(R.id.left_drawer); //find the list view in the drawer_layout
+
+        DatabaseHandler data = new DatabaseHandler(this);
+        Cursor cursor = data.getSemesterCursor();
+        String[] fromColumns = new String[]{KEY_SEMESTER};
+        int[] toViews = {android.R.id.text1};
+        SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1
+                , cursor, fromColumns, toViews, 0);
+        mDrawerList.setAdapter(mAdapter);
 
         // Tie DrawerLayout events to the ActionBarToggle
         dlDrawer.setDrawerListener(drawerToggle);
@@ -78,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements
         db = new DatabaseHandler(this);
 
         // Find our drawer view
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        //nvDrawer = (NavigationView) findViewById(R.id.nvView);
 
         // Setup drawer view
-        setupDrawerContent(nvDrawer);
+        //setupDrawerContent(nvDrawer);
 
         drawerToggle.syncState();
 
@@ -106,19 +118,16 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         //Create Database
-        if (db.getModsCount()<10) {
+        if (db.getModsCount() < 10) {
             BackgroundDBupdater = new DBupdate();
             BackgroundDBupdater.run();
-        };
+        }
+        ;
+    }
 
 
         //creating the button to add semesters
 
-
-
-
-
-    }
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -130,25 +139,9 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-/*
-        DatabaseHandler data = new DatabaseHandler(this);
-        data.addSemester();
-        //Cursor cursor = data.getSemesterCursor();
-        Cursor cursor = db.getAllModsFromSem();
-        //String[] fromColumns = new String[]{KEY_SEMESTER};
-        String[] fromColumns = new String[]{"ModuleCode"};
-        int[] toViews = {android.R.id.text1};
-        SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1
-                , cursor, fromColumns, toViews, 0);
-
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(mAdapter);
-*/
-
 
 
     }
-
 
 
     public void selectDrawerItem(MenuItem menuItem) {
@@ -317,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
 
         return true;
     }
