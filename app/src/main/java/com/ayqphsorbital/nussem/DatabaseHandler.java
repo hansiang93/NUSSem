@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.widget.SimpleCursorAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,6 +38,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_SEMESTER = "SEMESTER";
     private static final String KEY_GRADE = "GRADE";
 
+
+
+    private HashMap<String, String> mAliasMap;
 
 
     public DatabaseHandler(Context context) {
