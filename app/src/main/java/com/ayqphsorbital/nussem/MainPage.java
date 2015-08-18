@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -95,7 +99,6 @@ public class MainPage extends Fragment implements View.OnClickListener {
         semesterlist = (ListView)v.findViewById(R.id.listview);
         myListAdapter = new semesteradapter(getActivity(), mCursor, 0);
         semesterlist.setAdapter(myListAdapter);
-
         addsem = (Button) v.findViewById(R.id.addsem);
         addsem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,10 +111,7 @@ public class MainPage extends Fragment implements View.OnClickListener {
                     Cursor mCursor = db.getSemesterCursor();
                     myListAdapter.changeCursor(mCursor);
 
-                    CharSequence text = "Semester Added";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(getActivity(), text, duration);
-                    toast.show();
+                    semesterlist.setSelection(myListAdapter.getCount() - 1); //so that the screen goes to the bottom of the page
                 }
 
 
@@ -171,5 +171,7 @@ public class MainPage extends Fragment implements View.OnClickListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
 
 }

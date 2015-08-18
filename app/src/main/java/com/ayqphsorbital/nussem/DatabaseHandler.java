@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -79,11 +79,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = getWritableDatabase();
         String tablename = "SEM_"+semnumber;
+        db.execSQL("DROP TABLE IF EXISTS " + tablename);
         String CREATE_SEM1_TABLE = "CREATE TABLE " + tablename + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
                 + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
         return;
+
     }
 
     @Override
@@ -286,6 +288,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    public void deletesem(int semnum)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        if(semnum == 1)
+        {
+            return;
+        }
+        else {
+            String tablename = "SEM_"+semnum;
+            db.execSQL("DROP TABLE IF EXISTS " + tablename);
+        }
+
+    }
+
     public Cursor getSemesterCursor ()
     {
 
@@ -347,7 +363,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         ContentValues cv = new ContentValues();
         cv.put(KEY_GRADE, position);
-        int i = db.update(tablename, cv, KEY_CODE + "= '" + modulecode +"'", null);
+        int i = db.update(tablename, cv, KEY_CODE + "= '" + modulecode + "'", null);
         return;
 
     }
@@ -370,6 +386,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return gradepos;
 
 
+    }
+
+    public boolean iftableexist(String tableName)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
+        if(cursor!=null) {
+            if(cursor.getCount()>0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
     }
 
 

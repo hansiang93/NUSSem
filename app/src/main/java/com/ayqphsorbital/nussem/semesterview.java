@@ -81,6 +81,8 @@ public class semesterview extends Fragment {
 
         //geting what semester is being long clicked. so as to launch the correct semester in this frag
         _semnum = bundle.getInt("Semester");
+
+        getActivity().setTitle("Details");
     }
 
     @Override
@@ -110,7 +112,7 @@ public class semesterview extends Fragment {
         String gpastring = String.format("GPA for this semester: %.2f", gpa);
         _gpa.setText(gpastring);
 
-        String gradedgpa = "Total graded Credis taken = " + calc.totalgradedmc(_semnum, getActivity()) + "MC";
+        String gradedgpa = "Total graded Credits taken = " + calc.totalgradedmc(_semnum, getActivity()) + "MC";
         _totalgradedcredit.setText(gradedgpa);
 
 
@@ -240,11 +242,6 @@ public class semesterview extends Fragment {
 
 
     }
-
-
-
-
-
 
 
 }

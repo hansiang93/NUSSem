@@ -28,6 +28,7 @@
             android:id="@+id/adapter_ModuleName"
             android:layout_alignParentTop="true"
             android:layout_alignTop="@+id/spinner1"
+            android:layout_toLeftOf="@+id/spinner1"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textStyle="italic"
