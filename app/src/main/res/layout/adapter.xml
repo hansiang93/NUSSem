@@ -45,7 +45,8 @@
             android:textStyle="bold"
             android:textSize="30sp"
             android:paddingLeft="15sp"
-            android:layout_alignBottom="@+id/adapter_crossbutton" />
+            android:layout_below="@+id/adapter_ModuleName"
+            />
 
         <TextView
             android:layout_width="wrap_content"

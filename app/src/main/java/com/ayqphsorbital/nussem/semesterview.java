@@ -42,6 +42,7 @@ public class semesterview extends Fragment {
     TextView _semheader;
     TextView _gpa;
     TextView _totalcredit;
+    TextView _totalgradedcredit;
     LinearLayout _modulelist;
     private static final String KEY_CODE = "ModuleCode";
     private static final String KEY_TITLE = "ModuleTitle";
@@ -91,15 +92,27 @@ public class semesterview extends Fragment {
         _gpa = (TextView) rootview.findViewById(R.id.semview_GPA);
         _totalcredit = (TextView) rootview.findViewById(R.id.semview_mctotal);
         _modulelist = (LinearLayout) rootview.findViewById(R.id.semview_modlist);
+        _totalgradedcredit = (TextView) rootview.findViewById(R.id.semview_gradedmc);
+
+
 
         DatabaseHandler db = new DatabaseHandler(getActivity());
         db.getReadableDatabase();
         Cursor mCursor = db.getAllModsFromSem(_semnum);
+        mycalculator calc = new mycalculator();
 
-        String creditstaken = "Total Credits taken = " + totalcredit(mCursor) + "MC";
+        String creditstaken = "Total Credits taken = " + calc.totalcreditinsem(_semnum, getActivity()) + "MC";
         _totalcredit.setText(creditstaken);
 
         _semheader.setText("Semester " + _semnum);
+
+        double gpa = calc.gapforsem(_semnum, getActivity());
+        String gpastring = String.format("GPA for this semester: %.2f", gpa);
+        _gpa.setText(gpastring);
+
+        String gradedgpa = "Total graded Credis taken = " + calc.totalgradedmc(_semnum, getActivity()) + "MC";
+        _totalgradedcredit.setText(gradedgpa);
+
 
         populateview(_modulelist, mCursor);
 
@@ -207,6 +220,10 @@ public class semesterview extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     DatabaseHandler db = new DatabaseHandler(getActivity());
                     db.editgrade(_semnum, code, position);
+                    mycalculator calc = new mycalculator();
+                    double gpa = calc.gapforsem(_semnum, getActivity());
+                    String gpastring = String.format("GPA for this semester: %.2f",gpa);
+                    _gpa.setText(gpastring);
                 }
 
                 @Override
@@ -223,6 +240,8 @@ public class semesterview extends Fragment {
 
 
     }
+
+
 
 
 
