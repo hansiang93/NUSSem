@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String QUERY_URL = "http://api.nusmods.com/2015-2016/";
     private static final String KEY_SEMESTER = "SEMESTER";
     SearchView searchView;
+    String semview = "semesterview";
 
 
     @Override
@@ -358,6 +359,27 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
         return false;
+    }
+
+    @Override
+
+    //If the semesterview is in visible, then when the back button is pressed, the app will bring the user back to the overview
+    //otherwise it will just operate as a normal back button
+    public void onBackPressed() {
+
+        Fragment semviewfrag = getFragmentManager().findFragmentByTag(semview);
+        if (semviewfrag !=null && semviewfrag.isVisible()) {
+            fragmentClass = MainPage.class;
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

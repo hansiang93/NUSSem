@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -35,6 +35,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
     private static final String KEY_SEMESTER = "SEMESTER";
+    private static final String KEY_GRADE = "GRADE";
+
 
 
     public DatabaseHandler(Context context) {
@@ -52,7 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String CREATE_SEM1_TABLE = "CREATE TABLE " + SEM_ONE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
-                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER" + ")";
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
 
         String CREATE_OVERVIEW_TABLE = "CREATE TABLE " + OVERVIEW + "("
@@ -79,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String tablename = "SEM_"+semnumber;
         String CREATE_SEM1_TABLE = "CREATE TABLE " + tablename + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
-                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER" + ")";
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
         return;
     }
@@ -103,6 +105,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_CODE, Mod.getModuleCode()); // Module Code
         values.put(KEY_TITLE, Mod.getModuleTitle()); // Module Title
         values.put(KEY_CREDIT, Mod.getModuleCredit());
+        values.put(KEY_GRADE, 13);
+
 
         // Inserting Row
         if(semnum == 1) {
@@ -188,9 +192,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_MODULES, new String[] { KEY_ID,
+        Cursor cursor = db.query(TABLE_MODULES, new String[]{KEY_ID,
                         KEY_CODE, KEY_TITLE}, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+                new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -329,6 +333,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return data.moveToFirst();
 
     }
+
+    public void editgrade(int semnum, String modulecode, int position)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String tablename;
+        if(semnum == 1)
+        {
+            tablename = SEM_ONE;
+        }
+        else {
+            tablename = "SEM_" + semnum;
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_GRADE, position);
+        int i = db.update(tablename, cv, KEY_CODE + "= '" + modulecode +"'", null);
+        return;
+
+    }
+
+    public int getgrade (int semnum, String modulecode){
+        SQLiteDatabase db = getReadableDatabase();
+        String tablename;
+        if(semnum == 1)
+        {
+            tablename = SEM_ONE;
+        }
+        else {
+            tablename = "SEM_" + semnum;
+        }
+        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_CODE + " = '" + modulecode + "'";
+        Cursor data = db.rawQuery(command, null);
+        int columnpos = data.getColumnIndex(KEY_GRADE);
+        boolean testing = data.moveToFirst();
+        int gradepos = data.getInt(columnpos);
+        return gradepos;
+
+
+    }
+
 
 
 

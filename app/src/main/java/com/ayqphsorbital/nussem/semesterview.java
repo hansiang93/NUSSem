@@ -6,14 +6,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -42,6 +47,7 @@ public class semesterview extends Fragment {
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
     private LayoutInflater cursorInflater;
+
 
     double Aplus = 5.0;
     double Agrade = 5.0;
@@ -117,6 +123,7 @@ public class semesterview extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -185,15 +192,39 @@ public class semesterview extends Fragment {
             modulename.setText(title);
 
             Spinner dropdown = (Spinner) ChildView.findViewById(R.id.spinner1);
-            String[] items = new String[]{"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F", "S", "U"};
+            String[] items = new String[]{"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F", "S", "U", "NIL"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
             dropdown.setAdapter(adapter);
             view.addView(ChildView);
-            c.moveToNext();
+            DatabaseHandler db = new DatabaseHandler(getActivity());
+            int gradepos = db.getgrade(_semnum, code);
+            dropdown.setSelection(gradepos);
+
+            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    DatabaseHandler db = new DatabaseHandler(getActivity());
+                    db.editgrade(_semnum, code, position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+
+
+            });
+
+
+                    c.moveToNext();
         }
 
 
     }
+
+
 
 
 

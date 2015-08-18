@@ -31,6 +31,7 @@ public class semesteradapter extends CursorAdapter  {
     private Fragment fragment = null;
     private Class fragmentClass;
     private FragmentManager fragmentManager;
+    String semview = "semesterview";
 
 
     // Default constructor
@@ -80,7 +81,12 @@ public class semesteradapter extends CursorAdapter  {
                 bundle.putInt("Semester", position);
                 fragment.setArguments(bundle);
                 fragmentManager = ((Activity) context).getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+                //semview is a tag given to the fragment that is used when we try to press the back button on this fragment
+                // the main activity will see if this fragment is in view when the back button is pressed
+                // if it is, rather than closing the app, it will launch the overview fragment
+                // can look at main activity on back pressed
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment, semview).commit();
 
 
                 return true;
