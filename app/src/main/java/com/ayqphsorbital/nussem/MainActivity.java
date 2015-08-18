@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
+            //SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+            //        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            //suggestions.saveRecentQuery(query, null);
         }
 
 

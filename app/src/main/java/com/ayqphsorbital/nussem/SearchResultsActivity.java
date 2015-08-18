@@ -3,6 +3,7 @@ package com.ayqphsorbital.nussem;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -56,7 +57,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
     SearchView searchView;
     String _query;
     final Handler mHandler = new Handler();
-
+    private DatabaseHandler mDB;
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
             timmingoutsearch();
@@ -72,6 +73,8 @@ public class SearchResultsActivity extends AppCompatActivity implements
         ModCode = (TextView) findViewById(R.id.ModCode);
         ModTitle = (TextView) findViewById(R.id.ModTitle);
 
+        mDB = new DatabaseHandler(getApplicationContext());
+        mDB.getReadableDatabase();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -177,21 +180,30 @@ public class SearchResultsActivity extends AppCompatActivity implements
     public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
+            //SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+            //        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            //suggestions.saveRecentQuery(query, null);
             setTitle(query.toUpperCase());
 
             showResults(query);
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())){
+            Uri detailUri = intent.getData();
+            String Modid = detailUri.getLastPathSegment();
+            String query = mDB.getMod(Integer.parseInt(Modid)).getModuleCode();
+            setTitle(query.toUpperCase());
+            showResults(query);
+
+
+
         }
 
         //This is to allow long pressing of the ModuleDisplay adapter
         //to also search for the mod. 
         if (intent.getBooleanExtra("SPECIAL", false)) {
             String query = intent.getStringExtra("QUERY");
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
+            //SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+            //        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            //suggestions.saveRecentQuery(query, null);
             setTitle(query.toUpperCase());
             showResults(query);
 
