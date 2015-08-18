@@ -44,10 +44,12 @@ public class semesterview extends Fragment {
     TextView _totalcredit;
     TextView _totalgradedcredit;
     LinearLayout _modulelist;
+    LinearLayout _errorlist;
     private static final String KEY_CODE = "ModuleCode";
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
     private LayoutInflater cursorInflater;
+    int _intcreditstaken;
 
 
     double Aplus = 5.0;
@@ -95,7 +97,7 @@ public class semesterview extends Fragment {
         _totalcredit = (TextView) rootview.findViewById(R.id.semview_mctotal);
         _modulelist = (LinearLayout) rootview.findViewById(R.id.semview_modlist);
         _totalgradedcredit = (TextView) rootview.findViewById(R.id.semview_gradedmc);
-
+        _errorlist = (LinearLayout) rootview.findViewById(R.id.semview_errorlist);
 
 
         DatabaseHandler db = new DatabaseHandler(getActivity());
@@ -103,8 +105,15 @@ public class semesterview extends Fragment {
         Cursor mCursor = db.getAllModsFromSem(_semnum);
         mycalculator calc = new mycalculator();
 
-        String creditstaken = "Total Credits taken = " + calc.totalcreditinsem(_semnum, getActivity()) + "MC";
+        _intcreditstaken = calc.totalcreditinsem(_semnum, getActivity());
+
+        String creditstaken = "Total Credits taken = " + _intcreditstaken + "MC";
         _totalcredit.setText(creditstaken);
+
+
+
+        //send error message if number of credits being taken is greater than 27mc
+
 
         _semheader.setText("Semester " + _semnum);
 
@@ -117,6 +126,7 @@ public class semesterview extends Fragment {
 
 
         populateview(_modulelist, mCursor);
+        creatingerrormsg(); //Check for the different errors that might occur
 
         return rootview;
     }
@@ -240,6 +250,20 @@ public class semesterview extends Fragment {
                     c.moveToNext();
         }
 
+
+    }
+
+    protected void creatingerrormsg()
+    {
+
+        if(_intcreditstaken > 27)
+        {
+            View ChildView = cursorInflater.inflate(R.layout.errormsgview, null);
+            TextView errormsg = (TextView) ChildView.findViewById(R.id.errormsg);
+            String error = "Number of modular credits taken is greater than 27.";
+            errormsg.setText(error);
+            _errorlist.addView(ChildView);
+        }
 
     }
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import java.util.ArrayList;
+
 /**
  * Created by ang on 18/8/2015.
  */
@@ -82,6 +84,62 @@ public class mycalculator {
         }
         return total;
 
+    }
+
+    public ArrayList<String> getprereq(String prereq)
+    {
+       ArrayList<String> preqeulist = new ArrayList();
+        String temp = "";
+        int i = 0;
+
+        while(i < prereq.length())
+        {
+            switch(prereq.charAt(i)) {
+
+                 case ' ': {
+                    preqeulist.add(temp);
+                    temp = "";
+                    i++;
+                    break;
+
+                }
+
+                case'/': {
+                    preqeulist.add(temp);
+                    temp = "";
+                    i++;
+                    break;
+
+                }
+                case 'o': {
+                    if ((i + 1 < prereq.length()) && ((prereq.charAt(i) == 'r') || (prereq.charAt(i) == 'R'))) {
+                        preqeulist.add(temp);
+                        temp = "";
+                        i++;
+                        break;
+
+                    }
+                }
+                case 'O': {
+                    if ((i + 1 < prereq.length()) && ((prereq.charAt(i) == 'r') || (prereq.charAt(i) == 'R'))) {
+                        preqeulist.add(temp);
+                        temp = "";
+                        i++;
+                        break;
+
+                    }
+                }
+                default:{
+                    temp+=prereq.charAt(i);
+                    i++;
+                }
+            }
+
+        }
+
+        preqeulist.add(temp);
+
+        return preqeulist;
     }
 
     public double convertpositiontograde(int position)

@@ -47,6 +47,29 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Error list"
+        android:id="@+id/semview_errors"
+        android:gravity="start"
+        android:textSize="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="italic"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.13"
+        android:id="@+id/semview_errorlist"
+
+        >
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Summary"
         android:id="@+id/semview_summary"
         android:gravity="start"

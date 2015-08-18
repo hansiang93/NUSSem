@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.design.widget.TabLayout;
 import android.widget.SimpleCursorAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_CREDIT = "ModuleCredit";
     private static final String KEY_SEMESTER = "SEMESTER";
     private static final String KEY_GRADE = "GRADE";
-
+    private static final String KEY_PREREQUISITES = "GRADE";
 
 
     private HashMap<String, String> mAliasMap;
@@ -58,7 +59,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String CREATE_SEM1_TABLE = "CREATE TABLE " + SEM_ONE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
-                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER" + ")";
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER,"
+                + KEY_PREREQUISITES + "TEXT" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
 
         String CREATE_OVERVIEW_TABLE = "CREATE TABLE " + OVERVIEW + "("
@@ -86,7 +88,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + tablename);
         String CREATE_SEM1_TABLE = "CREATE TABLE " + tablename + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
-                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER" + ")";
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER"
+                + KEY_PREREQUISITES + "TEXT" +")";
         db.execSQL(CREATE_SEM1_TABLE);
         return;
 
@@ -404,6 +407,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.close();
         }
         return false;
+    }
+
+    public ArrayList<String> actualprereq(ArrayList<String> testing)
+    {
+
+
+        String[] selectionArgs = new String[testing.size()];
+        selectionArgs = testing.toArray(selectionArgs);
+        SQLiteDatabase db = getReadableDatabase();
+        String command =  KEY_CODE + " =?";
+        String[] columns = {KEY_CODE};
+        ArrayList<String> actual = new ArrayList();
+
+        for(int i = 0; i < testing.size(); i++) {
+
+            String[] variable = {selectionArgs[i]};
+            Cursor data = db.query(TABLE_MODULES, columns, command, variable, null, null, null, null);
+            if(data.moveToFirst())
+            {
+                actual.add(data.getString(data.getColumnIndex(KEY_CODE)));
+            }
+        }
+
+        return actual;
     }
 
 

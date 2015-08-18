@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.logging.LogRecord;
 
 /**
@@ -110,6 +112,10 @@ public class SearchResultsActivity extends AppCompatActivity implements
                         semIntent.putExtra("moduletitle", ModuleTitle);
                         semIntent.putExtra("AddingModule", true);
                         startActivity(semIntent);
+
+                        mycalculator calc = new mycalculator();
+                        ArrayList<String> testingpreq = calc.getprereq(Prerequisite);
+                        ArrayList<String> prereq = db.actualprereq(testingpreq);
 
                         CharSequence text = "Select semester for module to be added";
                         int duration = Toast.LENGTH_LONG;
@@ -255,6 +261,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
                                 Preclusion + "\n";
                         ResultsList.setText(data[0]);
 
+
                         if (ModuleCode == null) {
                             ModCode.setText(finalUrlString.toUpperCase());
                             ModTitle.setText("Module not found");
@@ -283,6 +290,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
 
 
     }
+
 
     @Override
     public boolean onQueryTextSubmit(String query) {
