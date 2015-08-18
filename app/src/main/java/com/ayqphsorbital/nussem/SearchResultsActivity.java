@@ -171,9 +171,9 @@ public class SearchResultsActivity extends AppCompatActivity implements
     public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
+            //SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+            //        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            //suggestions.saveRecentQuery(query, null);
             setTitle(query.toUpperCase());
 
             showResults(query);
@@ -183,9 +183,9 @@ public class SearchResultsActivity extends AppCompatActivity implements
         //to also search for the mod. 
         if (intent.getBooleanExtra("SPECIAL", false)) {
             String query = intent.getStringExtra("QUERY");
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
+            //SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+            //        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            //suggestions.saveRecentQuery(query, null);
             setTitle(query.toUpperCase());
             showResults(query);
 

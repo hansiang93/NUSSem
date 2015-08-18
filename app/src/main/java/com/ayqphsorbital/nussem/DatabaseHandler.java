@@ -1,10 +1,12 @@
 package com.ayqphsorbital.nussem;
 
+import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.design.widget.TabLayout;
 import android.widget.SimpleCursorAdapter;
 
@@ -45,7 +47,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        // This HashMap is used to map table fields to Custom Suggestion fields
+        mAliasMap = new HashMap<String, String>();
+
+        // Unique id for the each Suggestions ( Mandatory )
+        mAliasMap.put("_ID", KEY_ID + " as " + "_id" );
+
+        // Text for Suggestions ( Mandatory )
+        mAliasMap.put(SearchManager.SUGGEST_COLUMN_TEXT_1, KEY_CODE + " as " + SearchManager.SUGGEST_COLUMN_TEXT_1);
+
+// Icon for Suggestions ( Optional )
+        mAliasMap.put( SearchManager.SUGGEST_COLUMN_TEXT_2, KEY_TITLE + " as " + SearchManager.SUGGEST_COLUMN_TEXT_2);
+
+        // This value will be appended to the Intent data on selecting an item from Search result or Suggestions ( Optional )
+        mAliasMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, KEY_ID + " as " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
     }
+
+
 
     // Creating Tables
     @Override
@@ -351,7 +370,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         ContentValues cv = new ContentValues();
         cv.put(KEY_GRADE, position);
-        int i = db.update(tablename, cv, KEY_CODE + "= '" + modulecode +"'", null);
+        int i = db.update(tablename, cv, KEY_CODE + "= '" + modulecode + "'", null);
         return;
 
     }
@@ -376,6 +395,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+        public Cursor getModules(String[] selectionArgs){
+            String selection = KEY_CODE + " like ? ";
 
+            if(selectionArgs!=null){
+                selectionArgs[0] = "%"+selectionArgs[0]+"%";
+            }
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setProjectionMap(mAliasMap);
+
+            queryBuilder.setTables(TABLE_MODULES);
+
+            Cursor c = queryBuilder.query(this.getReadableDatabase(),
+                    new String[] { "_ID",
+                            SearchManager.SUGGEST_COLUMN_TEXT_1 ,
+                            SearchManager.SUGGEST_COLUMN_TEXT_2 ,
+                            SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID } ,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    KEY_CODE + " asc ","10"
+            );
+            return c;
+
+        }
 
 }
