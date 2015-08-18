@@ -3,14 +3,10 @@
     android:label="@string/app_label"
     android:hint="@string/search_hint"
     android:searchSuggestAuthority="com.ayqphsorbital.nussem.MySuggestionProvider"
-    android:searchSuggestIntentAction="android.Intent.action.VIEW"
     android:searchSuggestIntentData="content://com.ayqphsorbital.nussem.MySuggestionProvider/modules"
     android:searchSuggestSelection=" ?"
     android:searchSuggestThreshold="2"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
     >
-
-
-    <!--android:searchSuggestSelection=" ?"-->
-
 
 </searchable>
