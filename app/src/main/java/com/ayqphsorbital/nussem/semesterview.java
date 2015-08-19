@@ -48,6 +48,7 @@ public class semesterview extends Fragment {
     private static final String KEY_CODE = "ModuleCode";
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
+    private static final String KEY_PREREQUISITES = "PREREQ";
     private LayoutInflater cursorInflater;
     int _intcreditstaken;
 
@@ -215,13 +216,26 @@ public class semesterview extends Fragment {
             modulecode.setText(code);
             modulecredit.setText(credit);
             modulename.setText(title);
+            String prereq = c.getString(c.getColumnIndex(KEY_PREREQUISITES));
+
+            mycalculator calc = new mycalculator();
+            String[] prereqlist = calc.convertStringToArray(prereq);
+            DatabaseHandler db = new DatabaseHandler(getActivity());
+            if(!db.satisfyprereq(prereqlist, _semnum))
+            {
+                ChildView.setBackgroundColor(getActivity().getResources().getColor(R.color.red));
+                View ErrorView = cursorInflater.inflate(R.layout.errormsgview, null);
+                TextView errormsg = (TextView) ErrorView.findViewById(R.id.errormsg);
+                String error = code + " prerequisite is not fulfilled. Requires: " +prereq;
+                errormsg.setText(error);
+                _errorlist.addView(ErrorView);
+        }
 
             Spinner dropdown = (Spinner) ChildView.findViewById(R.id.spinner1);
             String[] items = new String[]{"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F", "S", "U", "NIL"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
             dropdown.setAdapter(adapter);
             view.addView(ChildView);
-            DatabaseHandler db = new DatabaseHandler(getActivity());
             int gradepos = db.getgrade(_semnum, code);
             dropdown.setSelection(gradepos);
 
@@ -264,6 +278,8 @@ public class semesterview extends Fragment {
             errormsg.setText(error);
             _errorlist.addView(ChildView);
         }
+
+
 
     }
 

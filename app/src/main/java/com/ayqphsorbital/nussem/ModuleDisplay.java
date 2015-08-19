@@ -25,6 +25,7 @@ public class ModuleDisplay{
     private static final String KEY_CODE = "ModuleCode";
     private static final String KEY_TITLE = "ModuleTitle";
     private static final String KEY_CREDIT = "ModuleCredit";
+    private static final String KEY_PREREQUISITES = "PREREQ";
     Button removemod;
     int semnum;
 
@@ -40,6 +41,9 @@ public class ModuleDisplay{
         cursorInflater.inflate(R.layout.adapter, null);
         cursor.moveToFirst();
 
+        mycalculator calc = new mycalculator();
+        DatabaseHandler db = new DatabaseHandler(context);
+
         while(!cursor.isAfterLast())
         {
             //Initializing the Childview before adding it into the LinearParent View
@@ -53,10 +57,19 @@ public class ModuleDisplay{
             final String title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
             final String code = cursor.getString(cursor.getColumnIndex(KEY_CODE));
             String credit = cursor.getInt(cursor.getColumnIndex(KEY_CREDIT)) + " MC";
+            String prereq = cursor.getString(cursor.getColumnIndex(KEY_PREREQUISITES));
+
+            String[] prereqlist = calc.convertStringToArray(prereq);
+            if(!db.satisfyprereq(prereqlist, semnum))
+            {
+                ChildView.setBackgroundColor(context.getResources().getColor(R.color.red));
+            }
 
             modulecode.setText(code);
             modulecredit.setText(credit);
             modulename.setText(title);
+
+
 
             removemod = (Button) ChildView.findViewById(R.id.adapter_crossbutton);
             removemod.setOnClickListener(new View.OnClickListener() {

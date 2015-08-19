@@ -35,7 +35,7 @@ import java.util.logging.LogRecord;
 public class SearchResultsActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener {
 
-
+    private static final String KEY_PREREQUISITES = "PREREQ";
     private TextView ResultsList;
     private TextView ModCode;
     private TextView ModTitle;
@@ -114,11 +114,17 @@ public class SearchResultsActivity extends AppCompatActivity implements
                         semIntent.putExtra("modulecredit", ModuleCredit);
                         semIntent.putExtra("moduletitle", ModuleTitle);
                         semIntent.putExtra("AddingModule", true);
-                        startActivity(semIntent);
+
 
                         mycalculator calc = new mycalculator();
                         ArrayList<String> testingpreq = calc.getprereq(Prerequisite);
                         ArrayList<String> prereq = db.actualprereq(testingpreq);
+                        String[] prereqstr = new String[prereq.size()];
+                        prereqstr = prereq.toArray(prereqstr); //converting the arraylist into a string array for easy storage into database and modinfo
+
+                        //convert the string array into a string and put it into the intent
+                        semIntent.putExtra(KEY_PREREQUISITES, calc.convertArrayToString(prereqstr));
+                        startActivity(semIntent);
 
                         CharSequence text = "Select semester for module to be added";
                         int duration = Toast.LENGTH_LONG;
@@ -333,7 +339,7 @@ public class SearchResultsActivity extends AppCompatActivity implements
         Thread t = new Thread() {
             public void run() {
                 try {
-                    sleep(3000);
+                    sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -18,6 +18,7 @@ public class mycalculator {
     private static final String KEY_CREDIT = "ModuleCredit";
     private static final String KEY_SEMESTER = "SEMESTER";
     private static final String KEY_GRADE = "GRADE";
+    public static String strSeparator = ",";
 
     public mycalculator(){}
 
@@ -139,6 +140,19 @@ public class mycalculator {
 
         preqeulist.add(temp);
 
+        if(preqeulist.size() > 10 )
+        {
+            //This might seem weird, but the reason for this is because there are some modules
+            //whose prerequisite string is very long, and that is because in their prerequisite string, they
+            //write GCE O levels and A level requirements. On top of these requirements, they also included
+            //specific modules should you not clear these requirements. So if we simply send the string as it is
+            // many students would not clear the module requirement even though they have cleared the O level and A level
+            //requirement. Thus for simplicity sake, we take all these mods which can be cleared by
+            //O or A level requirements, to have no prerequisite.
+            ArrayList<String> emptylist = new ArrayList();
+            return emptylist;
+        }
+
         return preqeulist;
     }
 
@@ -192,5 +206,27 @@ public class mycalculator {
 
         return -4;
 
+    }
+
+
+    public String convertArrayToString(String[] array){
+        String str = "";
+        for (int i = 0;i<array.length; i++) {
+            str = str+array[i];
+            // Do not append comma at the end of last element
+            if(i<array.length-1){
+                str = str+strSeparator;
+            }
+        }
+        return str;
+    }
+    public String[] convertStringToArray(String str){
+        if(str == null)
+        {
+            String[] temp = {};
+            return temp;
+        }
+        String[] arr = str.split(strSeparator);
+        return arr;
     }
 }

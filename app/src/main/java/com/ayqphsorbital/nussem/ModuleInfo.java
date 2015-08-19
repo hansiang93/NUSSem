@@ -12,6 +12,7 @@ public class ModuleInfo {
     String _ModuleCode;
     String _ModuleTitle;
     int _ModuleCredit;
+    String _Prerequisite;
 
     // Empty constructor
     public ModuleInfo(){
@@ -23,6 +24,7 @@ public class ModuleInfo {
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
         this._ModuleCredit = -1;
+        this._Prerequisite = "Not initialised";
     }
     // constructor
     public ModuleInfo(int id, String ModuleCode, String ModuleTitle, int ModuleCredit){
@@ -30,6 +32,7 @@ public class ModuleInfo {
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
         this._ModuleCredit = ModuleCredit;
+        this._Prerequisite = "Not initialised";
     }
 
     // constructor
@@ -37,6 +40,7 @@ public class ModuleInfo {
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
         this._ModuleCredit = -1;
+        this._Prerequisite = "Not initialised";
     }
 
     // constructor
@@ -44,6 +48,16 @@ public class ModuleInfo {
         this._ModuleCode = ModuleCode;
         this._ModuleTitle = ModuleTitle;
         this._ModuleCredit = ModuleCredit;
+        this._Prerequisite = "Not initialised";
+
+    }
+
+    // constructor
+    public ModuleInfo(String ModuleCode, String ModuleTitle, int ModuleCredit, String Prerequisite){
+        this._ModuleCode = ModuleCode;
+        this._ModuleTitle = ModuleTitle;
+        this._ModuleCredit = ModuleCredit;
+        this._Prerequisite = Prerequisite;
 
     }
 
@@ -88,4 +102,6 @@ public class ModuleInfo {
     {
         return _ModuleCredit;
     }
+
+    public String getPrerequisite(){return _Prerequisite;}
 }

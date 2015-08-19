@@ -32,6 +32,7 @@ public class semesteradapter extends CursorAdapter  {
     private Class fragmentClass;
     private FragmentManager fragmentManager;
     String semview = "semesterview";
+    private static final String KEY_PREREQUISITES = "PREREQ";
 
 
     // Default constructor
@@ -106,9 +107,11 @@ public class semesteradapter extends CursorAdapter  {
                         String ModuleCode = data.getStringExtra("modulecode");
                         String ModuleTitle = data.getStringExtra("moduletitle");
                         String ModuleCredit = data.getStringExtra("modulecredit");
+                        String prerequisite = data.getStringExtra(KEY_PREREQUISITES);
+
                         DatabaseHandler db = new DatabaseHandler(context);
                         int credit = Integer.parseInt(ModuleCredit);
-                        ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit);
+                        ModuleInfo mod1 = new ModuleInfo(ModuleCode, ModuleTitle, credit, prerequisite);
                         int position = (Integer) v.getTag(); //get the position which the button is clicked. Refers to which sem it is
                         db.addModtoSem(mod1, position);
                         Cursor mCursor = db.getAllModsFromSem(position);

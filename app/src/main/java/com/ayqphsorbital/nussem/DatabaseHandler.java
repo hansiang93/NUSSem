@@ -23,7 +23,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 22;
 
     // Database Name
     private static final String DATABASE_NAME = "ModuleList";
@@ -40,7 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_CREDIT = "ModuleCredit";
     private static final String KEY_SEMESTER = "SEMESTER";
     private static final String KEY_GRADE = "GRADE";
-    private static final String KEY_PREREQUISITES = "GRADE";
+    private static final String KEY_PREREQUISITES = "PREREQ";
 
 
     private HashMap<String, String> mAliasMap;
@@ -79,7 +79,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_SEM1_TABLE = "CREATE TABLE " + SEM_ONE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
                 + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER,"
-                + KEY_PREREQUISITES + "TEXT" + ")";
+                + KEY_PREREQUISITES + " TEXT" + ")";
         db.execSQL(CREATE_SEM1_TABLE);
 
         String CREATE_OVERVIEW_TABLE = "CREATE TABLE " + OVERVIEW + "("
@@ -107,8 +107,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + tablename);
         String CREATE_SEM1_TABLE = "CREATE TABLE " + tablename + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CODE + " TEXT,"
-                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER"
-                + KEY_PREREQUISITES + "TEXT" +")";
+                + KEY_TITLE + " TEXT," + KEY_CREDIT + " INTEGER," + KEY_GRADE + " INTEGER,"
+                + KEY_PREREQUISITES + " TEXT" +")";
         db.execSQL(CREATE_SEM1_TABLE);
         return;
 
@@ -134,6 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, Mod.getModuleTitle()); // Module Title
         values.put(KEY_CREDIT, Mod.getModuleCredit());
         values.put(KEY_GRADE, 13);
+        values.put(KEY_PREREQUISITES, Mod.getPrerequisite());
 
 
         // Inserting Row
@@ -369,11 +370,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean existinsem(ModuleInfo mod, String tablename)
     {
         SQLiteDatabase db = getReadableDatabase();
-        String modulename = mod.getModuleTitle();
-        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_TITLE + " = '" + modulename + "'";
+        String modulecode = mod.getModuleCode();
+        String command = "SELECT * FROM " + tablename + " WHERE " + KEY_CODE + " = '" + modulecode + "'";
         Cursor data = db.rawQuery(command, null);
         return data.moveToFirst();
 
+    }
+
+    public boolean satisfyprereq(String[] prereq, int semnum)
+    {
+        if(prereq.length == 1) //if there is no prerequisite, then it will definately satisfy
+        {
+            if(prereq[0]== "") {
+                return true;
+            }
+        }
+
+        for(int i=0; i < prereq.length; i++)
+        {
+            if(prereq[i] != "")
+            {
+                ModuleInfo mod = new ModuleInfo(prereq[i], "");
+                for(int j = 1; j < semnum; j++) //looping though all the semesters
+                {
+                    if(j==1) //This is done because sem_one table has a different name from all the other semesters
+                    {
+                        if(existinsem(mod,SEM_ONE))
+                            return true;
+                    }
+                    else
+                    {
+                        String tablename = "SEM_"+j;
+                        if(existinsem(mod, tablename))
+                            return true;
+                    }
+
+                }
+
+            }
+        }
+        return false;
     }
 
     public void editgrade(int semnum, String modulecode, int position)
@@ -414,7 +450,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-<<<<<<< HEAD
+
     public boolean iftableexist(String tableName)
     {
         SQLiteDatabase db = getReadableDatabase();
@@ -453,10 +489,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return actual;
     }
 
-=======
-        public Cursor getModules(String[] selectionArgs){
+
+    public Cursor getModules(String[] selectionArgs){
             String selection = KEY_CODE + " like ? ";
->>>>>>> origin/master
 
             if(selectionArgs!=null){
                 selectionArgs[0] = "%"+selectionArgs[0]+"%";
